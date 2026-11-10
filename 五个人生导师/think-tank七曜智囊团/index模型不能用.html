@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>七曜智囊团 · 阴阳五行议事</title>
+<style>
+:root{
+  --bg:#f6f2e9; --paper:#fffdf8; --ink:#2b2a26; --muted:#7b7466; --line:#e4dac6;
+  --accent:#8a5a2b; --accent-soft:#f0e6d4; --shadow:0 2px 14px rgba(90,70,40,.07);
+  --yin:#46536a; --yang:#c47b28; --jin:#a88438; --mu:#4c8557; --shui:#3d6e9e; --huo:#bf4a3c; --tu:#997343;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+  line-height:1.75;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(rgba(150,125,85,.09) 1px,transparent 1px);
+  background-size:22px 22px}
+.wrap{max-width:1120px;margin:0 auto;padding:28px 20px 60px}
+h1,h2,h3,.serif{font-family:"Songti SC","Noto Serif SC","STSong",Georgia,serif}
+button{font-family:inherit;cursor:pointer}
+button:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* hero */
+.hero{display:flex;gap:26px;align-items:center;background:var(--paper);border:1px solid var(--line);
+  border-radius:18px;padding:26px 30px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-70px;width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(196,123,40,.10),transparent 70%)}
+#compass{width:132px;height:132px;flex:0 0 132px}
+.eyebrow{margin:0 0 4px;font-size:11px;letter-spacing:.22em;color:var(--accent);text-transform:uppercase}
+.hero h1{margin:0;font-size:34px;letter-spacing:.12em;font-weight:700}
+.sub{margin:8px 0 0;color:var(--muted);font-size:14px;max-width:620px}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.chip{font-size:12px;color:var(--accent);background:var(--accent-soft);border:1px solid #e6d6ba;
+  border-radius:999px;padding:3px 12px}
+
+/* section */
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:16px;
+  padding:22px 24px;margin-top:18px;box-shadow:var(--shadow)}
+.sec-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.sec-head h2{margin:0;font-size:19px;letter-spacing:.08em}
+.sec-head .note{font-size:12px;color:var(--muted)}
+.sec-head .spacer{flex:1}
+.hint{font-size:12.5px;color:var(--muted);margin:6px 0 16px}
+.btn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:9px;
+  padding:6px 13px;font-size:12.5px;transition:.16s}
+.btn:hover{border-color:var(--accent);color:var(--accent);background:#fffaf1}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;padding:10px 26px;
+  font-size:15px;letter-spacing:.1em;border-radius:10px;font-family:"Songti SC","Noto Serif SC",serif}
+.btn.primary:hover{background:#73491f;color:#fff}
+.btn.primary:disabled{opacity:.5;cursor:not-allowed}
+.btn.ghost{background:transparent}
+
+/* advisors */
+.advisor-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}
+.advisor{border:1px solid var(--line);border-radius:13px;padding:14px;background:#fff;
+  transition:.18s;position:relative;overflow:hidden}
+.advisor::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c);opacity:.85}
+.advisor.off{opacity:.48;filter:grayscale(.55)}
+.advisor:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(90,70,40,.10)}
+.ad-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tag{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;
+  background:var(--c);color:#fff;font-family:"Songti SC",serif;font-size:15px;flex:0 0 30px}
+.pick{font-size:11px;border:1px solid var(--line);background:#fff;border-radius:999px;padding:2px 9px;color:var(--muted)}
+.pick.on{background:var(--c);border-color:var(--c);color:#fff}
+.advisor h3{margin:10px 0 2px;font-size:17px;letter-spacing:.05em}
+.school{margin:0;font-size:11.5px;color:var(--c);font-weight:600;letter-spacing:.03em}
+.one{margin:8px 0 0;font-size:12px;color:var(--muted);line-height:1.6;min-height:38px}
+.more{margin-top:10px;border:0;background:none;padding:0;font-size:12px;color:var(--accent)}
+.detail{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px;font-size:12px;color:#514b40}
+.detail p{margin:0 0 7px}
+.detail b{color:var(--ink)}
+.detail .quote{color:var(--accent);font-family:"Songti SC",serif}
+
+/* questions */
+.question-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:11px;margin-top:12px}
+.qcard{text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;padding:14px;
+  display:flex;flex-direction:column;gap:6px;transition:.16s;color:var(--ink)}
+.qcard:hover{border-color:var(--accent);background:#fffaf1;transform:translateY(-2px)}
+.qcard.active{border-color:var(--accent);background:#fff6e7;box-shadow:inset 0 0 0 1px var(--accent)}
+.qno{font-size:11px;letter-spacing:.14em;color:var(--accent)}
+.qtag{font-size:10.5px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:1px 8px;align-self:flex-start}
+.qtitle{font-family:"Songti SC",serif;font-size:15px;font-weight:700}
+.qtext{font-size:11.5px;color:var(--muted);line-height:1.55}
+
+/* ask */
+.ask-label{display:block;font-size:13px;font-weight:600;margin:14px 0 7px}
+textarea{width:100%;min-height:96px;resize:vertical;border:1px solid var(--line);border-radius:11px;
+  padding:13px 15px;font-size:14px;line-height:1.7;color:var(--ink);background:#fff;font-family:inherit}
+textarea::placeholder{color:#a8a094}
+.row{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field > span{font-size:11.5px;color:var(--muted)}
+.segmented{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+.segmented button{border:0;background:#fff;padding:9px 15px;font-size:13px;color:var(--muted);border-right:1px solid var(--line)}
+.segmented button:last-child{border-right:0}
+.segmented button.sel{background:var(--accent);color:#fff}
+select{border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff;color:var(--ink);font-size:13px}
+.mode-desc{font-size:12px;color:var(--muted);margin:9px 0 0;min-height:20px}
+.tip{font-size:11.5px;color:#9a8f7c;margin-top:12px}
+
+/* result */
+.result[hidden]{display:none}
+.result{border-color:#d9c7a6;background:linear-gradient(180deg,#fffdf7,#fff)}
+.issue{border-left:3px solid var(--accent);padding:2px 0 2px 14px;margin:6px 0 18px}
+.issue .k{font-size:11px;color:var(--accent);letter-spacing:.14em}
+.issue .q{font-family:"Songti SC",serif;font-size:18px;line-height:1.6;margin-top:4px}
+.meta{font-size:11.5px;color:var(--muted);margin-top:6px}
+.dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:12px 0 18px}
+.dim{background:#faf5ea;border:1px solid var(--line);border-radius:9px;padding:8px 10px}
+.dim span{display:block;font-size:11px;color:var(--muted)}
+.dim b{font-size:13px}
+.balance{margin:4px 0 20px}
+.balance .bar{height:9px;border-radius:999px;background:linear-gradient(90deg,var(--yin),#e8e1d2 50%,var(--yang));position:relative}
+.balance .needle{position:absolute;top:-5px;width:3px;height:19px;background:#2b2a26;border-radius:2px;transition:left .5s ease}
+.balance .ends{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:6px}
+.sec-title{font-family:"Songti SC",serif;font-size:16px;letter-spacing:.06em;margin:22px 0 10px;
+  display:flex;align-items:center;gap:9px}
+.sec-title::after{content:"";flex:1;height:1px;background:var(--line)}
+.voice{border:1px solid var(--line);border-left:3px solid var(--c);border-radius:10px;background:#fff;
+  padding:12px 15px;margin-bottom:9px;animation:rise .45s both}
+@keyframes rise{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.voice .vh{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:5px}
+.voice .vn{font-family:"Songti SC",serif;font-size:15px;font-weight:700}
+.voice .vt{font-size:11px;color:var(--c);border:1px solid var(--c);border-radius:999px;padding:0 8px}
+.voice .vl{font-size:11px;color:var(--muted)}
+.voice p{margin:0;font-size:13.5px;line-height:1.75}
+.callout{background:#faf4e8;border:1px dashed #d8c6a5;border-radius:11px;padding:14px 16px;margin-top:14px;font-size:13px}
+.callout h4{margin:0 0 8px;font-family:"Songti SC",serif;font-size:14.5px;color:var(--accent)}
+.callout ul{margin:0;padding-left:19px}
+.callout li{margin-bottom:6px}
+.split{display:flex;gap:10px;flex-wrap:wrap;margin-top:9px}
+.split div{flex:1;min-width:210px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:12.5px}
+.sign{margin-top:18px;padding:15px 18px;border-radius:12px;background:#2f3540;color:#f4ecdb;
+  font-family:"Songti SC",serif;font-size:15px;letter-spacing:.05em;line-height:1.8}
+.sign small{display:block;font-family:system-ui,sans-serif;font-size:10.5px;letter-spacing:.16em;color:#b9b0a0;margin-bottom:4px}
+.disclaim{font-size:11.5px;color:var(--muted);margin-top:14px;text-align:center}
+
+/* log */
+.log-list{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.log-item{border:1px solid var(--line);border-radius:9px;padding:9px 12px;background:#fff;font-size:12.5px}
+.log-item .lh{display:flex;gap:9px;flex-wrap:wrap;color:var(--muted);font-size:11px;margin-bottom:3px}
+.log-item .lt{color:var(--ink);line-height:1.55}
+.empty{font-size:12.5px;color:var(--muted);padding:12px 0}
+footer{text-align:center;color:var(--muted);font-size:11.5px;margin-top:26px;line-height:1.9}
+.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#2f3540;color:#fff;
+  padding:9px 18px;border-radius:999px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:20}
+.toast.show{opacity:1}
+
+/* local model (Ollama) — 沿用宣纸浅色体系 */
+.llm-box{border:1px solid var(--line);background:#fdfaf3;border-radius:12px;padding:13px 15px;margin-top:14px}
+.llm-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.llm-head .spacer{flex:1}
+.llm-switch{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;cursor:pointer}
+.llm-switch input{width:16px;height:16px;accent-color:var(--accent);cursor:pointer}
+.llm-src{font-size:11.5px;color:var(--muted);border:1px dashed var(--line);border-radius:999px;padding:2px 10px}
+.llm-src.on{color:var(--accent);border-color:#d9c19a;background:#fff6e7}
+.llm-row{margin-top:11px;align-items:flex-end}
+.llm-box input[type=text],.llm-box input[type=number]{border:1px solid var(--line);border-radius:9px;padding:8px 10px;
+  background:#fff;color:var(--ink);font-size:13px;font-family:inherit;width:100%}
+.llm-box input[type=text]{min-width:210px}
+.llm-box input[type=number]{width:96px}
+.llm-box select{width:100%}
+.llm-status{font-size:12px;margin-top:10px;line-height:1.7}
+.llm-status.ok{color:#3f7a4a}.llm-status.err{color:#a5442f}.llm-status.pending{color:var(--muted)}
+.llm-status code{display:block;white-space:pre-wrap;background:#fff;border:1px solid var(--line);border-radius:8px;
+  padding:9px 11px;margin-top:7px;font-size:11.5px;color:#514b40;font-family:ui-monospace,Consolas,monospace}
+.llm-note{font-size:11.5px;color:var(--muted);margin:9px 0 0;line-height:1.65}
+.src-badge{font-size:10px;border:1px solid var(--line);border-radius:999px;padding:0 7px;color:var(--muted)}
+.src-badge.model{color:#3f7a4a;border-color:#bcd7bf;background:#f2f9f2}
+.voice.settled{animation:none}
+.llm-notice{font-size:12px;border:1px dashed #d8c6a5;background:#faf4e8;border-radius:10px;padding:9px 13px;margin:0 0 14px;line-height:1.7}
+.llm-notice.ok{color:#3f7a4a;border-color:#bcd7bf;background:#f2f9f2}
+.llm-notice.warn{color:#96602a}
+.llm-extra{border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;background:#fff;padding:12px 15px;margin-bottom:9px}
+.llm-extra h4{margin:0 0 6px;font-family:"Songti SC",serif;font-size:14px;color:var(--accent)}
+.llm-extra p{margin:0;font-size:13px;line-height:1.75;white-space:pre-wrap}
+@media(max-width:640px){.llm-box input[type=text]{min-width:0}.llm-row{align-items:stretch}}
+
+@media(max-width:640px){
+  .hero{flex-direction:column;text-align:center;padding:22px 18px}
+  .hero h1{font-size:28px}.sub{text-align:center}
+  #compass{width:104px;height:104px;flex-basis:104px}
+  .panel{padding:18px 15px}.row{align-items:stretch}
+  .segmented{width:100%}.segmented button{flex:1;padding:9px 6px;font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <svg id="compass" viewBox="0 0 120 120" aria-label="阴阳五行七曜罗盘"></svg>
+    <div class="hero-txt">
+      <p class="eyebrow">Yin · Yang · Wu Xing / Decision Council</p>
+      <h1>七曜智囊团</h1>
+      <p class="sub">阴阳判大势，五行析细节。七位各执一签，面对人生关键分岔口，从不同方向同时开口——观点允许冲突，也允许谁都不说服谁。</p>
+      <div class="stats">
+        <span class="chip" id="statRound">议事 0 回合</span>
+        <span class="chip" id="statUnlock">已请 0 / 7 位</span>
+        <span class="chip">阳 · 阴 · 金 · 木 · 水 · 火 · 土 全覆盖</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="panel" id="sec-advisors">
+    <div class="sec-head">
+      <h2>一 · 点将台</h2>
+      <span class="note">点亮者可出席议事；点名字可展开完整档案</span>
+      <span class="spacer"></span>
+      <button class="btn" id="btnAll">全员出席</button>
+      <button class="btn" id="btnRandom">随机点将</button>
+      <button class="btn" id="btnPolar">只请阴阳</button>
+    </div>
+    <p class="hint">阵容会改变结论的倾向：进取派多则「势在进」，守成派多则「势在守」。至少三位出席方可开坛。</p>
+    <div class="advisor-grid" id="advisorGrid"></div>
+  </section>
+
+  <section class="panel" id="sec-questions">
+    <div class="sec-head"><h2>二 · 五道典型签题</h2><span class="note">点击填入议题栏，可再改文字、换模式</span></div>
+    <div class="question-grid" id="questionGrid"></div>
+  </section>
+
+  <section class="panel" id="sec-ask">
+    <div class="sec-head"><h2>三 · 开坛议事</h2><span class="note">也可直接写下你自己的问题</span></div>
+    <label class="ask-label" for="questionInput">议题</label>
+    <textarea id="questionInput" placeholder="例如：我 35 岁，要不要辞掉稳定的工作去创业？把处境、选项、顾虑、最晚什么时候要定，尽量写清楚……"></textarea>
+    <div class="row">
+      <div class="field">
+        <span>输出模式</span>
+        <div class="segmented" id="modeSel"></div>
+      </div>
+      <div class="field">
+        <span>场景判类</span>
+        <select id="judgeSel">
+          <option value="auto">自动识别（推荐）</option>
+          <option value="choice">强制按「选择」处理</option>
+          <option value="decision">强制按「决定」处理</option>
+        </select>
+      </div>
+      <div class="field">
+        <span>&nbsp;</span>
+        <button class="btn primary" id="btnConvene">召集议事</button>
+      </div>
+    </div>
+
+    <div class="llm-box" id="llmBox">
+      <div class="llm-head">
+        <label class="llm-switch" for="llmEnabled"><input type="checkbox" id="llmEnabled" checked><span>启用本地模型推演（Ollama）</span></label>
+        <span class="llm-src on" id="llmSrcTag">当前答案来源：本地模型 qwen2.5:7b（单次成篇）</span>
+        <span class="spacer"></span>
+        <button class="btn" id="btnLlmTest">测试连接</button>
+      </div>
+      <div class="row llm-row">
+        <div class="field">
+          <span>服务地址</span>
+          <input type="text" id="llmUrl" placeholder="http://127.0.0.1:11434" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="field">
+          <span>模型名（可自由填写）</span>
+          <input type="text" id="llmModel" placeholder="qwen2.5:7b" autocomplete="off" spellcheck="false">
+        </div>
+        <div class="field">
+          <span>调用方式</span>
+          <select id="llmCall">
+            <option value="single">单次成篇（1 次请求）</option>
+            <option value="per">逐位推演（每位 1 次，并发）</option>
+            <option value="verdict">仅补结论（1 次请求）</option>
+          </select>
+        </div>
+        <div class="field">
+          <span>超时（秒 · 默认 120）</span>
+          <input type="number" id="llmTimeout" value="120" min="5" max="600" step="10">
+        </div>
+      </div>
+      <div class="llm-status" id="llmStatus"></div>
+      <p class="llm-note">「仅补结论」仅在「共识收敛」模式下生效；其他模式自动按「单次成篇」处理。模型名可自由填写本机已装模型（ollama list 可查）；首次加载 7B 模型可能需 1 分钟左右，等待期间上方结果已可先阅读。若连接失败，先确认服务是否启动、地址是否正确、模型名是否正确；若刚重启过 Ollama 或改用 file:// 打开，再检查 OLLAMA_ORIGINS 是否随服务重启生效。任何异常都会自动回退内置推演，不影响议事。设置保存在本机浏览器，刷新后保留。</p>
+    </div>
+
+    <p class="mode-desc" id="modeDesc"></p>
+    <p class="tip">小机关：试试输入「今天中午吃什么」——若判为执行层的「决定」，智囊团会拒绝兴师动众，只给简要建议。最终决定权仍在你手上。</p>
+  </section>
+
+  <section class="panel result" id="secResult" hidden><div id="resultBody"></div></section>
+
+  <section class="panel" id="sec-log">
+    <div class="sec-head"><h2>四 · 议事录</h2><span class="spacer"></span>
+      <button class="btn" id="btnExport">导出 Markdown</button>
+      <button class="btn ghost" id="btnClearLog">清空</button>
+    </div>
+    <div class="log-list" id="logList"><div class="empty">尚无议事记录。</div></div>
+  </section>
+
+  <footer>
+    七曜智囊团 · 离线推演引擎，无需联网与账号；观点由内置思想风格库生成，用于打开思路，不构成投资 / 医疗 / 法律专业建议。<br>
+    涉及上述领域请咨询持牌专业人士。最终决定权与责任，始终在你本人。
+  </footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+
+/* ============ 基础数据 ============ */
+var TAGS = ['阴','阳','金','木','水','火','土'];
+var TAG_COLOR = {'阴':'#46536a','阳':'#c47b28','金':'#a88438','木':'#4c8557','水':'#3d6e9e','火':'#bf4a3c','土':'#997343'};
+
+var SCENES = {
+  career:{name:'职业 / 创业', kw:['辞职','创业','offer','跳槽','工作','公司','升职','副业','裁员','老板','转岗','上班','事业','合伙','裸辞','大厂']},
+  asset:{name:'资产 / 投资', kw:['买房','房价','贷款','杠杆','投资','股票','基金','存款','积蓄','首付','理财','租金','资产','买不买','利率','上车','钱']},
+  place:{name:'城市 / 迁移', kw:['换城市','城市','搬家','移民','出国','留学','北上广','回老家','定居','异地','二线','迁','离开']},
+  relation:{name:'关系 / 家庭', kw:['结婚','离婚','分手','伴侣','对象','父母','孩子','家庭','相亲','异地恋','感情','婚姻','催婚','相处','关系']},
+  growth:{name:'学习 / 转行', kw:['读研','考研','读书','学习','转行','技能','考试','进修','博士','培训','自律','考证','零基础','课程','读博']},
+  general:{name:'通用议题', kw:[]}
+};
+
+var MODES = {
+  roundtable:{name:'圆桌并列', desc:'七位各自独立陈述，保留冲突、不强行调和。适合选项尚未成形、需要打开视野与暴露盲区的探索期。'},
+  redteam:{name:'逆向红队', desc:'全员只找失败路径、反面证据与最坏情形，先求不败。适合高代价不可逆、或已有明显倾向需要证伪的场景。'},
+  consensus:{name:'共识收敛', desc:'列出共识、分歧及其背后假设差异，收敛为一条综合结论 + 3–5 条可检验的行动。适合选项已清晰、需要拍板落地。'}
+};
+
+var QUESTIONS = [
+  {tag:'职业 / 创业', title:'要不要辞职去创业', q:'我 35 岁，大厂产品经理，年薪不错但越来越没热情。前同事拉我创业做 AI 工具，要投 30 万积蓄、收入归零至少半年，家里两个孩子要养、房贷还没还完。最晚下个月给答复，要不要辞职？', scene:'career'},
+  {tag:'资产 / 投资', title:'要不要现在加杠杆买房', q:'手里有一笔积蓄，房价横盘、利率在变，家里一直催着上车。是现在加杠杆买房，还是继续租房把钱留着？我担心一旦收入波动就撑不住月供。', scene:'asset'},
+  {tag:'城市 / 迁移', title:'要不要举家换城市', q:'在一线城市打拼八年，父母渐老、孩子快到上学年纪，有个回二线城市的机会，收入大约降三成，但离家近、房子便宜。要不要举家搬回去？', scene:'place'},
+  {tag:'关系 / 家庭', title:'要不要推进这段关系', q:'和伴侣相持多年，感情平淡但彼此可靠，家里催着定下来；分开又怕后悔，也怕耽误对方。要不要推进结婚这件事？', scene:'relation'},
+  {tag:'学习 / 转行', title:'要不要辞职转行', q:'工作三年，想转行做 AI，但零基础，得辞职读研两年、学费不菲，毕业后也不确定能不能进得去。要不要现在就转？', scene:'growth'}
+];
+
+var ADVISORS = [
+  {
+    id:'xiong', tag:'阳', name:'熊彼特', full:'约瑟夫·熊彼特', era:'1883–1950 · 20世纪上半叶',
+    identity:'奥地利裔美国经济学家、哈佛大学教授', school:'创新理论 / 创造性破坏',
+    domain:'技术革命与长波周期、企业家精神、增长与繁荣的动力学',
+    reason:'阳＝宏观趋势的上行面：扩张、加速、旧结构被新力量掀翻。他是把「繁荣由创新内生驱动」系统化的第一人，与「阴」构成同一周期不可分割的两面。',
+    lens:'任何决策先问「哪股新力量正在取代旧秩序」，据此判断该顺势加入还是提前转身。',
+    quote:'创新不是改良，是把旧结构整片掀掉。', stance:2,
+    voices:{
+      career:'别问这份工作稳不稳，问哪一波创新正在把它依附的旧结构掀掉。站到新组合那一边，哪怕眼前收入归零——企业家的利润本来就来自动荡。',
+      asset:'资产的价值不来自它今天的租金，来自它所依附的那条技术长波还在不在上升段。你买的究竟是旧周期的残值，还是新周期的入口？',
+      place:'城市是一次正在重排的产业组合。别看它现在给你什么，看哪些新产业、新人才正在往那里聚——繁荣从来是从某个角落长出来的。',
+      relation:'关系也是一种组合，长期不变的结构会被新的生活形态重组。真正要问的是：你们是否还在共同创造某种新东西，而不是各自守着旧角色。',
+      growth:'转行的价值不在补齐技能，在你能把两个领域的要素重新组合一次。只追随已有岗位的人，永远被下一波创造性破坏推着走。',
+      general:'先找出这件事里正在发生的「新组合」。旧秩序被掀翻时，犹豫的成本往往比站错队更高。'
+    },
+    invert:{
+      career:'你以为在创业，其实只是给一个即将被淘汰的旧行业做改良——浪潮来时，改良品第一个沉。',
+      asset:'最大的失败不是买贵，是买在一条已经走完的长波末端，然后用三十年杠杆为上一代的繁荣付账。',
+      place:'迁到一个靠旧产业撑着的城市，等于把自己绑在下一轮创造性破坏的靶心上。',
+      relation:'两个人合力维护的只是一个已不再生长的结构，等外部变化一到，连争执的资格都没有了。',
+      growth:'学的是上一波浪潮需要的技能，毕业那天正好赶上它被替代。',
+      general:'整件事里根本没有新组合，只有对旧秩序的精致修补——这是最体面的一种失败。'
+    },
+    stanceLine:'倾向进：把资源押向正在生成的新结构，而非修补旧的。',
+    action:'列出这件事里可能形成的 3 个「新组合」，并各找一个已在发生的现实例子来验证。'
+  },
+  {
+    id:'taleb', tag:'阴', name:'塔勒布', full:'纳西姆·尼古拉斯·塔勒布', era:'当代',
+    identity:'黎巴嫩裔美国学者、前衍生品交易员，《黑天鹅》《反脆弱》作者', school:'尾部风险 / 反脆弱',
+    domain:'尾部风险、系统脆弱性、极端不确定性下的生存策略',
+    reason:'阴＝宏观趋势的收敛面：收缩、下行、熵增与边界。专门补上阳看不见的崩塌路径，使宏观判断不因增长叙事而系统性偏乐观。',
+    lens:'只问「最坏情形能否承受、会不会一次性出局」，用可生存性对诱人叙事行使否决权。',
+    quote:'只要有一次能让你出局，前面赢多少次都不算数。', stance:-2,
+    voices:{
+      career:'先别算上行空间。算最坏情形：收入归零能撑多久？如果一次失败就让你再也不能上桌，这个赌注的结构本身就是错的。',
+      asset:'不问能涨多少，问有没有隐藏的尾部：杠杆、流动性、被迫平仓、单一收入来源。任何「稳赚」的说法，都是把风险挪到了你看不见的地方。',
+      place:'换城市是典型的不可逆加高不确定。先用可撤回的小规模试住把未知暴露出来，别一次性把关系、资产和身份全搬过去。',
+      relation:'不要只看相处好的日子，看压力情形下这个结构会碎成什么样。能承受冲击的关系，才值得继续加注。',
+      growth:'先问这项投入会不会让你失去「随时退出」的能力。保留可选性，比押对方向更重要。',
+      general:'我只问一句：这件事有没有可能让你一次性出局？有，就先改结构，再谈收益。'
+    },
+    invert:{
+      career:'积蓄、健康、家庭现金流同时压在一个未经验证的方向上，一次黑天鹅全部归零——不是运气差，是结构脆。',
+      asset:'用杠杆买入流动性差的资产，再叠加失业，三者同时发生时没有任何缓冲，只能在最差的价格上被迫卖出。',
+      place:'落地后发现收入、社保、人脉全要重来，而退路已经卖掉，你被锁死在一个没有期权的位置。',
+      relation:'为了维持表面稳定不断加码承诺，等真正的冲击到来时，退出成本已经高到无法承受。',
+      growth:'把时间与钱全投进单一路径，方向一旦被证伪，既没有第二技能，也没有现金缓冲。',
+      general:'隐藏的尾部风险在你最不能承受的时刻集中兑现，而且没有任何一份预案写过它。'
+    },
+    stanceLine:'倾向守：先消除一次性出局的路径，再谈收益。',
+    action:'写出最坏情形的三条连锁路径，并给每条设一个「可承受上限」与退出触发条件。'
+  },
+  {
+    id:'munger', tag:'金', name:'芒格', full:'查理·芒格', era:'1924–2023 · 20世纪至21世纪初',
+    identity:'美国投资家、伯克希尔·哈撒韦副董事长', school:'多元思维模型 / 逆向思考',
+    domain:'多元思维模型、逆向思考、认知偏误诊断、能力圈纪律',
+    reason:'金主细节层的收敛、切割与法则；负责把发散信息削成明确判据与「不做清单」，提供团队里唯一的锐利否定能力。',
+    lens:'不问「怎么赢」，问「怎样必然输」，并强制核查激励结构与多重偏误叠加。',
+    quote:'葡萄干拌屎，还是屎。', stance:-1,
+    voices:{
+      career:'不问这份工作有多好。问什么一定会让你在这里完蛋，把那些列出来，避开。剩下的不用太聪明也够活。别用「热爱」给没算过的账盖章。',
+      asset:'先画激励结构图：谁劝你买，他靠什么赚钱。答案多半不在契约里，在佣金里。看不懂的，放进 Too Hard 筐。',
+      place:'把搬与不搬的理由各写一遍，然后花同样时间找反对自己的证据。找不到，说明你搜得不够努力，不是你有多对。',
+      relation:'多数人不是判断错，是被「已经投入这么多」和「别人都这样」一起推着走。两个偏误叠加，比单个偏误蠢得多。',
+      growth:'这在你能力圈里吗？如果不能用反对者的语言把他们的理由讲得比他们更好，你还没有资格持有这个观点。我没什么要补充的。',
+      general:'蠢事清单先过一遍：不懂、上杠杆、听人劝、怕错过、把复杂解释当深刻。避完这五条，剩下的选择自然不会太差。'
+    },
+    invert:{
+      career:'激励错位、过度自信、怕错过，三样一起上就是 Lollapalooza。你不是在做决策，是在被推着签字。',
+      asset:'佣金驱动的建议、被剥夺超级反应、社会认同——只要有一个致命缺陷，整个组合就是有毒的，别指望其他优点能中和它。',
+      place:'为了一个没被反证过的假设，把不可逆的成本一次性付清。这是蠢，不是勇敢。',
+      relation:'沉没成本加面子，让人在明知不对的结构里继续加注，直到连「退出」这两个字都不敢说出口。',
+      growth:'在能力圈外发表最激烈的意见，再把舒适区包装成「纪律」——这是这套方法最容易被自己骗到的地方。',
+      general:'一个致命缺陷就足以毁掉整件事。优点不能替它解毒，一条都不能。'
+    },
+    stanceLine:'倾向守：先排除必输路径，用逆向与激励诊断下判断。',
+    action:'花与论证等量时间搜集反对证据，并画出所有相关方的激励结构：谁赚钱、谁担风险。'
+  },
+  {
+    id:'darwin', tag:'木', name:'达尔文', full:'查尔斯·达尔文', era:'1809–1882 · 19世纪',
+    identity:'英国博物学家、生物进化论奠基人', school:'演化 / 自然选择',
+    domain:'演化、变异与自然选择、长时段渐进积累、反面证据',
+    reason:'木主细节层的生长、分枝与长期试错；补足团队唯一的时间维度——不预测终点，只判断哪些变异会被环境保留，与金的「一刀切」形成张力。',
+    lens:'把方案视为种群，追问「它靠什么迭代、在什么环境下会被淘汰」，据此设计小规模可证伪的试验。',
+    quote:'存活下来的不是最强的，也不是最聪明的，是最能适应变化的。', stance:1,
+    voices:{
+      career:'别押「哪条路正确」，押「哪条路能让你持续产生变异并被环境筛选」。先放三个小样本出去，看哪个活下来，再加大投入。',
+      asset:'资产也受选择压力。别看它过去十年长得多好，看支撑它的环境是否还在；环境一变，最适应的性状会立刻变成负担。',
+      place:'迁移是一次环境更换。先派一个最小的自己去试住三个月，观察哪些习惯存活、哪些被淘汰，再决定整体搬迁。',
+      relation:'关系不是一次定终身的判断，是长期共同适应。看你们有没有一起随环境变化的能力，而不是此刻有多合拍。',
+      growth:'进化的单位是微小、可累积的差异。别设计宏大的转型，设计每周都能被现实检验的一点点变异。',
+      general:'我从不预测终点，只问：这个方案靠什么迭代？每一次反馈会不会留下一点可继承的改进？'
+    },
+    invert:{
+      career:'一次性 all-in 等于把全部变异压在一个样本上，环境稍有变化就全军覆没，连可筛选的后代都没留下。',
+      asset:'把过去的高增长当作对未来的证明，忽略环境已经改变——这是把适应误认成永恒。',
+      place:'整体搬迁而不做小规模试住，等于跳过所有选择环节，让一次性结果决定全部。',
+      relation:'双方都停止变化，只是重复旧分工；等外部压力一来，结构没有任何可适应的余地。',
+      growth:'计划宏大却没有反馈回路，一年后既没积累也没修正，只是把同一天重复了三百遍。',
+      general:'没有反馈、没有变异、没有淘汰，方案看起来完整，其实已经停止生长。'
+    },
+    stanceLine:'倾向进（渐进）：用小步变异与反馈迭代替代一次性定论。',
+    action:'设计一个 2–4 周可完成、能产生真实反馈的最小试验，并事先写明「什么结果算被淘汰」。'
+  },
+  {
+    id:'sunzi', tag:'水', name:'孙武', full:'孙武', era:'约公元前5世纪 · 春秋末期',
+    identity:'齐国军事家、《孙子兵法》作者', school:'虚实 / 因势 / 迂回',
+    domain:'态势与情报、虚实判断、迂回路径与时机成本',
+    reason:'水主细节层的流变、无形与因势；负责「势」而非「力」，避免团队把硬碰硬、正面加码当成唯一解法。',
+    lens:'以「知彼知己、避实击虚、以迂为直」重排资源，优先找代价最低、随时可撤回的路径与出手时机。',
+    quote:'兵无常势，水无常形；能因敌变化而取胜者，谓之神。', stance:-1,
+    voices:{
+      career:'知彼知己：先把对方的真实处境与自己的可用资源列清楚。真正的高手不硬攻最热闹的赛道，找它守不住的空隙进去。',
+      asset:'兵形象水，避实击虚。别在所有人抢同一资产时加价，等势能转向、无人争的时点再动，代价最低。',
+      place:'以迂为直：想要的不必直取。先用项目、短期派驻、远程协作把关系与信息铺过去，再谈搬家。',
+      relation:'先为不可胜，以待敌之可胜。先把自己能独立站稳的部分做实，相处的势自然就变了，不必硬碰硬。',
+      growth:'转行不必正面攻坚。找你现有能力与目标领域之间那条无人设防的窄路，从侧翼进去，比从头考一遍省得多。',
+      general:'上策是不战而胜：先问有没有一条不必硬碰、代价最小、随时可撤回的路径。势到了再动手，动手就要有胜算。'
+    },
+    invert:{
+      career:'正面硬攻最拥挤的赛道，用自己最短的板去碰别人最长的板，资源耗尽时连撤退路线都没留。',
+      asset:'在情绪最热、所有人同时加价时进场，等于主动把自己放到「实」之处，把主动权交给对手。',
+      place:'一次性直取，信息、人脉、退路全未铺好，落地即陷入被动，只能一件件应付。',
+      relation:'把每次分歧都当阵地战硬攻，赢了几句话，输了整个势，最后连协商余地都没有。',
+      growth:'选了最正面、最消耗的正攻路线，还没接触目标领域，时间与健康先耗光了。',
+      general:'只准备了一种强攻方案，势一变就无路可走——无变化者，先败。'
+    },
+    stanceLine:'倾向守（取势）：找代价最低、可撤回的迂回路径，不硬碰。',
+    action:'列出 2 条「不正面硬碰」的替代路径，并各标注所需的情报、时点与退路。'
+  },
+  {
+    id:'jobs', tag:'火', name:'乔布斯', full:'史蒂夫·乔布斯', era:'1955–2011 · 20世纪末至21世纪初',
+    identity:'美国企业家、苹果公司联合创始人及前 CEO', school:'聚焦与极致 / 减法',
+    domain:'产品愿景、聚焦与减法、直觉与体验判断',
+    reason:'火主细节层的点燃、照亮与催化；五行中唯一提供「我们到底想要什么」的正向牵引，平衡金之否定与阴之防守。',
+    lens:'逼问「如果只能留一件事，留哪件」，以舍弃定义方向，并检验方案是否真的让人心动。',
+    quote:'Focus means saying no to a hundred other good ideas.', stance:2,
+    voices:{
+      career:'如果只能留一件事，你留哪件？把其余十个「不错的机会」全砍掉。真正的问题是：你有没有热爱到愿意承受归零；只是想逃离现状，那是个错误理由。',
+      asset:'别用收益率来选。问这个东西是否真的让你想把日子过成某个样子。复杂到需要一张表格才能解释的选择，通常就是错的选择。',
+      place:'城市不是参数表，是每天早上醒来愿不愿意待的地方。别比较，去住两周，身体比模型诚实。',
+      relation:'删掉所有「应该」。剩下那个你还想留下的理由，才是答案。不够心动，就别用责任把它包装成伟大。',
+      growth:'别问哪个证书更有用，问哪件事让你愿意在没人要求时也做到极致。聚焦不是选一个，是对另外九十九个说不。',
+      general:'Stay hungry, stay foolish。先做减法：砍到只剩一件，再看它是不是真的让你心动。'
+    },
+    invert:{
+      career:'同时追五个「还行」的方向，每个都投一点，最后一个都没做到极致——这不是稳健，是没有答案。',
+      asset:'为一串漂亮数字买下一个自己根本不想要的生活，然后每天醒来都要说服自己这是对的。',
+      place:'用房价、学区、通勤时间堆出一个最优解，住进去才发现没有一处是你真正想要的。',
+      relation:'把「不该分开」的理由列得越完整，越说明你早已不在其中，只是不敢承认。',
+      growth:'收集一堆课程与证书，却始终不肯对任何一件事说「就是它」，于是永远在准备，从未开始。',
+      general:'选项越列越多，其实是在回避那个真正要做减法的决定。复杂本身就是失败。'
+    },
+    stanceLine:'倾向进：用聚焦与减法砍到唯一，检验是否真心热爱。',
+    action:'把所有选项写到纸上，划到只剩一个；写下「若只能做这一件，我愿意放弃什么」。'
+  },
+  {
+    id:'zeng', tag:'土', name:'曾国藩', full:'曾国藩', era:'1811–1872 · 19世纪晚清',
+    identity:'湘军统帅、两江总督、理学名臣', school:'拙诚 / 结硬寨打呆仗',
+    domain:'组织建设、执行节奏、日课式自我约束与稳健推进',
+    reason:'土主细节层的承载、根基与厚重；把前六人的判断落到可重复、可验收的动作上，是团队唯一负责「怎么做成」的一环，使判断闭环接到执行闭环。',
+    lens:'「结硬寨、打呆仗」，先求不败再求胜，用可验证的小步积累替代一次性豪赌。',
+    quote:'结硬寨，打呆仗；不取巧，不冒进。', stance:-2,
+    voices:{
+      career:'结硬寨、打呆仗。先兼职把最小的一件事做实，把现金与家人安顿好，再谈 all-in。先求不败，不取巧。',
+      asset:'量入为出，留足余粮。不必算得最精，只要每月账目清楚、不借超出偿还能力的钱，日子自然稳得住。',
+      place:'先把落脚处、差事、日用这三样扎稳，再谈长远。迁移最忌一步到位，先立住一个小寨，慢慢扩。',
+      relation:'以拙诚相待，不靠一时话术。把该说的、该担的，每日一件件做出来，比一次长谈管用。',
+      growth:'日课为上。每天固定一个时辰，不贪多、不断线，一年之后自见分晓。聪明人输在断续，笨人赢在不止。',
+      general:'不问奇谋，只问今日能做的一件实事。把它写进日课，明日复之，久自有成。'
+    },
+    invert:{
+      career:'一上手就压上全部积蓄与全部时间，寨未扎稳先求大胜，一次受挫便全线崩，连复盘的机会都没有。',
+      asset:'账面好看便加码，日用不留余粮，遇一次变故就得拆东墙补西墙，根基一松全盘皆动。',
+      place:'未立稳就举家搬迁，落脚、收入、人情三处皆虚，一件小事就能把全部安排打乱。',
+      relation:'只在情绪好时用力，日常不肯下笨功夫，等到需要彼此托底时，地基是空的。',
+      growth:'开头猛、三日热，日课一断便自责、再断便放弃，一年下来只留下几份没读完的计划。',
+      general:'求快、求巧、求一次成，不肯做每日可验的一件小事——这是最常败的一条路。'
+    },
+    stanceLine:'倾向守：先求不败，以可重复的日课把判断落到地基上。',
+    action:'定一条每日可完成、可打勾的「日课」，连续执行 14 天后再回头评估方向。'
+  }
+];
+
+var VERDICT = {
+  career:{common:'都反对「情绪驱动的裸辞」与未经验证的一次性 all-in。',split:'分歧在「先动起来」还是「先求不败」：阳 / 火 / 木看重新结构的窗口期，阴 / 金 / 水 / 土看重安全垫与退路。',key:'关键变量是「现金流安全垫」与「方向验证程度」。两者不足之前，方向上先验证，再谈选择。'},
+  asset:{common:'都反对在信息不清、现金流紧绷时加满杠杆。',split:'分歧在「资产本身值不值」：阳 / 火看长期位置与想要的生活，阴 / 金 / 土看尾部风险与账目余粮。',key:'关键变量是「最坏情形下的月供可承受月数」，而非价格涨跌判断；这个数算不出来，就不该签字。'},
+  place:{common:'都反对在信息与退路未铺好时一次性举家搬迁。',split:'分歧在「迁与不迁」：阳 / 火看新环境的生长性与生活意愿，阴 / 水 / 土看可逆性与落地成本。',key:'关键变量是「这次迁移能不能拆成可撤回的几步」；能拆，就先试一步，不必现在定终身。'},
+  relation:{common:'都反对单靠「应该」与外界催促来推进不可逆的承诺。',split:'分歧在「凭什么判断」：火 / 木凭内心是否仍想共同生长，水 / 土凭日常可验证的相处与承担，阴 / 金凭压力情形下的结构是否稳。',key:'关键变量是「你留下来的理由里，有没有一条不依赖『应该』」；若没有，先别加码承诺。'},
+  growth:{common:'都反对辞职、脱产、高额学费三件事同时一次性押上。',split:'分歧在「速度与路径」：阳 / 火看赛道窗口与热爱，木 / 水看小步试错与侧翼进入，金 / 土 / 阴看能力圈与余粮。',key:'关键变量是「能否在不辞职的前提下，先拿到一次真实反馈」；拿得到，就不必用两年时间去赌一个假设。'},
+  general:{common:'都反对在关键变量尚未识别前，就急着做不可逆的一次性投入。',split:'分歧在「进取还是守成」：阳 / 火 / 木偏顺势生长与聚焦，阴 / 金 / 水 / 土偏先排除致命路径、留好退路。',key:'关键变量是「这件事可逆吗、最坏情形能否承受」；先把这两问答清楚，其余分歧才有讨论的落点。'}
+};
+
+var SIGNS = [
+  {max:-1.2, text:'势在守。宜先筑寨、留余粮，勿以一时之气决数年之事。'},
+  {max:-0.4, text:'阴重于阳。先消致命路径，再谈进取；慢一步不算输。'},
+  {max:0.4, text:'阴阳相持。此局无定论，胜负在验证，不在雄辩。'},
+  {max:1.2, text:'阳渐盛。可进，但须留一条随时可撤回的退路。'},
+  {max:99, text:'势在进。宜乘新结构未定之时落子，久议反失其时。'}
+];
+
+var DIMS_CHOICE = [['可逆性','低 · 难回头'],['影响范围','全局 · 结构性'],['发生频率','低频'],['时间尺度','数年以上']];
+var DIMS_DECISION = [['可逆性','高 · 可修正'],['影响范围','局部 · 执行性'],['发生频率','高频'],['时间尺度','数天至数周']];
+var SHORT_WORDS = /今天|今晚|这周|本周|明天|中午|午饭|晚饭|穿什么|吃什么|点什么|回不回|先做哪|看哪部|这顿|此刻|马上回/;
+
+/* ============ 状态 ============ */
+var state = {on:new Set(ADVISORS.map(function(a){return a.id;})), mode:'consensus',
+  rounds:0, unlocked:new Set(), log:[], forcedScene:null, forceChoice:false, selectedQ:-1};
+
+/* ============ 工具 ============ */
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function $(id){return document.getElementById(id);}
+function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._tm);t._tm=setTimeout(function(){t.classList.remove('show');},2200);}
+function pickSign(avg){for(var i=0;i<SIGNS.length;i++){if(avg<=SIGNS[i].max)return SIGNS[i].text;}return SIGNS[4].text;}
+function shortText(s,n){return s.length>n?s.slice(0,n)+'…':s;}
+
+/* ============ 本地模型（Ollama）· 配置与调用层 ============ */
+var LLM_KEYS = {enabled:'tt_ollama_enabled',url:'tt_ollama_url',model:'tt_ollama_model',call:'tt_ollama_call',timeout:'tt_ollama_timeout'};
+var LLM_DEFAULT = {enabled:true,url:'http://127.0.0.1:11434',model:'qwen2.5:7b',call:'single',timeout:120};
+var LLM_CALLS = {single:'单次成篇',per:'逐位推演',verdict:'仅补结论'};
+var LLM_MODE_RULE = {
+  roundtable:'圆桌并列：每位各自独立陈述，保留冲突、不强行调和，务必体现各自独特的判断方式。',
+  redteam:'逆向红队：全员只写失败路径、反面证据与最坏情形，先求不败，不提乐观建议。',
+  consensus:'共识收敛：每位简明给出自己的立场与最关键判据，为随后收敛做准备。'
+};
+/* 当前页面是否以 file:// 直接打开：此时浏览器把来源记为 null，
+   Ollama 对 null 来源的预检直接返回 403（实测），改 OLLAMA_ORIGINS 通常也救不回，
+   唯一稳妥解法是改用 http 地址打开。 */
+var IS_FILE_PROTO=(typeof location!=='undefined'&&location&&location.protocol==='file:');
+var LLM_FILE_STEP='★ 最高优先级：当前页面是 file:// 直接打开。浏览器会把来源记为 null，Ollama 对 null 来源直接返回 403，改 OLLAMA_ORIGINS 通常也无效。改用 http 打开即可：在本文件所在目录执行 python -m http.server 8000（或 npx serve），再访问 http://127.0.0.1:8000/index.html；也可以直接关掉上方开关，用内置推演。';
+var LLM_TROUBLE_BASE = [
+  '1) 确认服务是否启动：终端执行 ollama serve（或确认 Windows 托盘图标在运行）。服务被关掉是最常见的失败原因。',
+  '2) 确认地址是否正确：默认 http://127.0.0.1:11434。',
+  '3) 确认模型名是否正确：需与 ollama list 中的名称一致（可自由填写）；未安装则执行 ollama pull qwen2.5:7b。7B 模型首次加载可能需 1 分钟左右，可调大超时后重试。',
+  '4) 次级排查：只有在「用 http 地址打开」的前提下，跨域才可能被拦。Ollama 默认放行全部 localhost 端口，一般无需设置；若刚重启过服务或改过白名单，再确认 OLLAMA_ORIGINS 是否随服务重启生效。Windows 下：',
+  '   set OLLAMA_ORIGINS=*',
+  '   ollama serve',
+  '   PowerShell 写法：$env:OLLAMA_ORIGINS="*"; ollama serve',
+  '5) 浏览器无法区分「连接被拒绝」与「跨域被拦截」，二者都表现为 Failed to fetch；请优先排查服务是否还在运行，再考虑跨域。'
+];
+var LLM_TROUBLE=(IS_FILE_PROTO?[LLM_FILE_STEP]:[]).concat(LLM_TROUBLE_BASE).join('\n');
+
+function lsGet(k){try{return window.localStorage.getItem(k);}catch(e){return null;}}
+function lsSet(k,v){try{window.localStorage.setItem(k,v);}catch(e){/* file:// 下 localStorage 可能被禁用，忽略 */}}
+var llmBusy=false;
+
+function loadLlm(){
+  var c={enabled:LLM_DEFAULT.enabled,url:LLM_DEFAULT.url,model:LLM_DEFAULT.model,call:LLM_DEFAULT.call,timeout:LLM_DEFAULT.timeout};
+  var e=lsGet(LLM_KEYS.enabled);if(e!==null)c.enabled=(e==='1'||e==='true');
+  var u=lsGet(LLM_KEYS.url);if(u)c.url=u;
+  var m=lsGet(LLM_KEYS.model);if(m)c.model=m;
+  var call=lsGet(LLM_KEYS.call);if(call&&LLM_CALLS[call])c.call=call;
+  var t=parseInt(lsGet(LLM_KEYS.timeout),10);if(isFinite(t)&&t>=5&&t<=600)c.timeout=t;
+  return c;
+}
+var llm=loadLlm();
+
+function saveLlm(){
+  lsSet(LLM_KEYS.enabled,llm.enabled?'1':'0');
+  lsSet(LLM_KEYS.url,llm.url);lsSet(LLM_KEYS.model,llm.model);
+  lsSet(LLM_KEYS.call,llm.call);lsSet(LLM_KEYS.timeout,String(llm.timeout));
+}
+function apiBase(){return String(llm.url||LLM_DEFAULT.url).replace(/\/+$/,'');}
+function srcLabel(call){return '本地模型 '+(llm.model||LLM_DEFAULT.model)+'（'+(LLM_CALLS[call]||call)+'）';}
+
+function normErr(e){
+  if(e&&e.type)return e;
+  if(e instanceof TypeError)return {type:'network',msg:(e&&e.message)||'Failed to fetch'};
+  return {type:'network',msg:(e&&e.message)||String(e)};
+}
+function humanLlmError(e){
+  if(!e)return '未知错误';
+  if(e.type==='timeout')return '请求超时（'+llm.timeout+' 秒内未返回；7B 模型首次加载可能需 1 分钟左右，可调大超时或稍后重试）';
+  if(e.type==='http')return '服务返回 '+e.msg+'（检查地址是否正确、模型是否已 ollama pull）';
+  if(e.type==='parse')return '响应格式异常：'+e.msg;
+  if(e.type==='network'){
+    var tail=IS_FILE_PROTO
+      ? '；当前页面是 file:// 直接打开，Ollama 会以 403 拒绝该来源，改 OLLAMA_ORIGINS 通常无效；请改用 http 打开（本目录执行 python -m http.server 8000，再访问 http://127.0.0.1:8000/index.html）'
+      : '；若刚重启过 Ollama 或改过白名单，再检查 OLLAMA_ORIGINS 是否随服务重启生效';
+    return '无法连接 Ollama 服务（'+(e.msg||'Failed to fetch')+'）：先确认服务是否启动、地址与模型名是否正确'+tail;
+  }
+  return e.msg||String(e);
+}
+
+/* POST /api/chat：AbortController 超时 + HTTP / 网络(连接) / 解析 分类 */
+function ollamaChat(messages,timeoutSec){
+  var ctrl=(typeof AbortController!=='undefined')?new AbortController():null;
+  var opts={method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:llm.model,messages:messages,stream:false,options:{temperature:0.8}})};
+  if(ctrl)opts.signal=ctrl.signal;
+  var timer=null,aborted=false,fetchP;
+  try{fetchP=fetch(apiBase()+'/api/chat',opts);}
+  catch(err){return Promise.reject({type:'network',msg:(err&&err.message)||'fetch 不可用'});}
+  var timeoutP=new Promise(function(_,reject){
+    timer=setTimeout(function(){aborted=true;if(ctrl){try{ctrl.abort();}catch(x){}}reject({type:'timeout'});},Math.max(5,timeoutSec)*1000);
+  });
+  return Promise.race([fetchP,timeoutP]).then(function(r){
+    if(!r.ok)throw {type:'http',msg:'HTTP '+r.status+' '+(r.statusText||'')};
+    return r.json().catch(function(){throw {type:'parse',msg:'响应不是合法 JSON'};});
+  }).then(function(j){
+    var c=j&&j.message&&j.message.content;
+    if(typeof c!=='string'||!c.trim())throw {type:'parse',msg:'缺少 message.content 或内容为空'};
+    return c.trim();
+  }).catch(function(e){
+    if(aborted)throw {type:'timeout'};
+    if(e&&e.type)throw e;
+    throw normErr(e);
+  }).then(function(v){if(timer)clearTimeout(timer);return v;},function(e){if(timer)clearTimeout(timer);throw e;});
+}
+
+/* ---- 提示词构造 ---- */
+function rosterLine(a){return a.tag+'｜'+a.name+'｜'+a.school+'｜'+a.lens+'｜「'+a.quote+'」';}
+function sysSingle(team,mode,cls){
+  return '你是「七曜智囊团」的议事秘书，需代以下几位思想家就用户的议题发言。\n'+
+    '出席阵容（标签｜姓名｜学派｜独特视角｜名言）：\n'+
+    team.map(function(a){return '- '+rosterLine(a);}).join('\n')+'\n'+
+    '议题归类：'+cls.name+'。本轮模式：'+LLM_MODE_RULE[mode]+'\n'+
+    '输出要求（严格遵守）：\n'+
+    '1. 只输出上述出席者的发言，每位一段；每段首行必须严格以【标签｜姓名】开头，标签与姓名须与阵容完全一致（段首格式示例：【阴｜塔勒布】），其后另起一行写正文。\n'+
+    '2. 正文 80–160 字，第一人称，贴合该位的思想风格与视角；不要复述人设，不要写小标题、总结、名单或任何额外说明。\n'+
+    '3. 不要输出出席名单之外的人物，不要使用 Markdown 标记。\n'+
+    '4. 每位恰好一段，共 '+team.length+' 段。';
+}
+function sysPer(a,mode,cls){
+  return '你是「七曜智囊团」中【'+a.tag+'｜'+a.name+'】的唯一代言人。\n'+
+    '身份：'+a.full+'；学派：'+a.school+'；专长：'+a.domain+'。\n'+
+    '独特视角：'+a.lens+'\n名言：「'+a.quote+'」\n'+
+    '议题归类：'+cls.name+'。本轮模式：'+LLM_MODE_RULE[mode]+'\n'+
+    '请针对用户议题以第一人称发言，80–160 字，只输出发言正文：不要复述人设、不要小标题、不要总结、不要 Markdown、不要提到自己是 AI 或模型。';
+}
+function sysVerdict(team,mode,cls){
+  return '你是「七曜智囊团」的议事秘书。以下思想家已就用户议题发言，请你收敛为可执行结论。\n'+
+    '出席阵容：'+team.map(function(a){return a.tag+'｜'+a.name+'（'+a.school+'）';}).join('；')+'。\n'+
+    '议题归类：'+cls.name+'。本轮模式：共识收敛。\n'+
+    '输出严格使用如下格式，不要输出其他内容：\n'+
+    '结论：<一段 80–160 字的综合结论，点明关键变量与共识 / 分歧>\n'+
+    '建议：\n1. <一条可检验、可执行的行动建议>\n2. <...>\n'+
+    '（建议 3–5 条；每条一行，以数字序号开头）';
+}
+
+/* ---- 解析（宽容，不丢内容） ---- */
+function parseVoices(text,team){
+  var out={},marks=[],m,re=/【\s*([阴阳金木水火土])\s*[|｜]\s*([^】]+?)\s*】/g;
+  while((m=re.exec(text))!==null){marks.push({tag:m[1],name:m[2],start:m.index,end:re.lastIndex});}
+  for(var i=0;i<marks.length;i++){
+    var body=text.slice(marks[i].end,i+1<marks.length?marks[i+1].start:text.length).trim();
+    if(!body)continue;
+    var hit=null,k;
+    for(k=0;k<team.length;k++){
+      var a=team[k];
+      if(a.tag===marks[i].tag&&(a.name===marks[i].name||marks[i].name.indexOf(a.name)>=0||a.name.indexOf(marks[i].name)>=0)){hit=a;break;}
+    }
+    if(!hit){for(k=0;k<team.length;k++){if(team[k].tag===marks[i].tag){hit=team[k];break;}}}
+    if(hit&&!out[hit.id])out[hit.id]=body;
+  }
+  return out;
+}
+function parseVerdict(text){
+  var t=String(text||'').replace(/\r/g,'');
+  var cm=/结论\s*[:：]\s*([\s\S]*?)(?=\n\s*(?:建议|行动)\s*[:：]|$)/.exec(t);
+  var concl=cm?cm[1].trim():t.trim();
+  var lines=t.split('\n'),acts=[],i,m;
+  for(i=0;i<lines.length;i++){
+    m=/^\s*(?:\d+\s*[.、)）]|[-*•])\s*(.+?)\s*$/.exec(lines[i]);
+    if(m&&m[1]&&m[1].length>3)acts.push(m[1].trim());
+  }
+  return {concl:concl,acts:acts.slice(0,5)};
+}
+
+/* ---- 设置面板 UI / 连接体检 ---- */
+function llmSyncUI(){
+  $('llmEnabled').checked=llm.enabled;
+  $('llmUrl').value=llm.url;$('llmModel').value=llm.model;
+  $('llmCall').value=LLM_CALLS[llm.call]?llm.call:'single';
+  $('llmTimeout').value=llm.timeout;
+  var tag=$('llmSrcTag');
+  tag.textContent='当前答案来源：'+(llm.enabled?(IS_FILE_PROTO?'本地模型（file:// 下会被拦截，将回退内置）':srcLabel(llm.call)):'内置推演（离线）');
+  tag.className='llm-src'+(llm.enabled&&!IS_FILE_PROTO?' on':'');
+}
+function setLlmStatus(html,kind){var s=$('llmStatus');s.innerHTML=html;s.className='llm-status'+(kind?' '+kind:'');}
+function copyText(t){
+  try{
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(function(){toast('排查步骤已复制。');},function(){fallbackCopy(t);});
+    }else fallbackCopy(t);
+  }catch(e){fallbackCopy(t);}
+}
+function fallbackCopy(t){
+  try{
+    var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    toast('排查步骤已复制。');
+  }catch(e){toast('复制失败，请手动选中文本复制。');}
+}
+function llmTroubleHtml(reason){
+  return '<div>✕ 连接失败：'+esc(reason)+'</div>'+
+    '<code>'+esc(LLM_TROUBLE)+'</code>'+
+    '<button class="btn" id="btnLlmCopy" style="margin-top:7px">复制排查步骤</button>';
+}
+function testLlm(){
+  if(llmBusy){toast('正在推演中，请稍后再测试。');return;}
+  var btn=$('btnLlmTest');btn.disabled=true;
+  setLlmStatus('正在检测 '+esc(apiBase())+' /api/tags …','pending');
+  var ctrl=(typeof AbortController!=='undefined')?new AbortController():null;
+  var opts={method:'GET'};if(ctrl)opts.signal=ctrl.signal;
+  var timedOut=false,fetchP;
+  var timer=setTimeout(function(){timedOut=true;if(ctrl){try{ctrl.abort();}catch(x){}}},15000);
+  try{fetchP=fetch(apiBase()+'/api/tags',opts);}catch(e){fetchP=Promise.reject(e);}
+  fetchP.then(function(r){
+    if(!r.ok)throw {type:'http',msg:'HTTP '+r.status+' '+(r.statusText||'')};
+    return r.json().catch(function(){throw {type:'parse',msg:'/api/tags 返回的不是合法 JSON'};});
+  }).then(function(j){
+    var names=((j&&j.models)||[]).map(function(m){return m.name||m.model||'';});
+    var want=llm.model;
+    var found=names.some(function(n){return n===want||n.indexOf(want.split(':')[0])===0;});
+    var list=names.length?('已装 '+names.length+' 个模型：'+names.slice(0,6).join('、')+(names.length>6?' …':'')):'模型列表为空';
+    setLlmStatus((found?'✓ 已连接；':'⚠ 已连接，但')+esc(list)+'<br>'+
+      (found?'✓ 已找到 '+esc(want)+'，可以直接开坛议事。':'未找到 '+esc(want)+'。请先执行 ollama pull '+esc(want)+'，或修改上方模型名。')+
+      '<br><span style="color:var(--muted)">若开坛时回退，先确认服务仍在运行、地址与模型名是否正确；必要时再检查 OLLAMA_ORIGINS。</span>'+
+      (found?'':'<code>'+esc(LLM_TROUBLE)+'</code>'),found?'ok':'err');
+    if(!found)$('llmStatus').insertAdjacentHTML('beforeend','<button class="btn" id="btnLlmCopy" style="margin-top:7px">复制排查步骤</button>');
+  }).catch(function(e){
+    var reason=timedOut?'体检请求超时（15 秒内未返回）':humanLlmError(normErr(e));
+    setLlmStatus(llmTroubleHtml(reason),'err');
+  }).then(function(){
+    clearTimeout(timer);btn.disabled=false;
+    var cp=$('btnLlmCopy');if(cp)cp.addEventListener('click',function(){copyText(LLM_TROUBLE);});
+  },function(){clearTimeout(timer);btn.disabled=false;});
+}
+var llmTicker=null,llmTick=0;
+function setConveneBusy(busy){
+  llmBusy=busy;
+  var b=$('btnConvene');if(!b)return;
+  if(llmTicker&&typeof clearInterval!=='undefined'){clearInterval(llmTicker);llmTicker=null;}
+  if(busy){
+    if(!b.getAttribute('data-orig'))b.setAttribute('data-orig',b.textContent);
+    llmTick=0;b.disabled=true;b.textContent='正在推演… 0s';
+    /* 7B 冷加载可能长达 1 分钟；每秒刷新已等待秒数，避免用户以为卡死 */
+    if(typeof setInterval!=='undefined')llmTicker=setInterval(function(){
+      llmTick++;
+      b.textContent='正在推演… '+llmTick+'s';
+      var n=$('llmNotice');
+      if(n)n.textContent='正在请求 '+srcLabel(llm.call)+'… 已等待 '+llmTick+' 秒（首次加载 7B 模型可能需 1 分钟左右）。上方为完整内置推演，可先阅读；若连接失败将自动回退内置推演。';
+    },1000);
+  }else{
+    llmTick=0;b.disabled=false;b.textContent=b.getAttribute('data-orig')||'召集议事';
+  }
+}
+function initLlm(){
+  llmSyncUI();
+  if(IS_FILE_PROTO){
+    setLlmStatus('⚠ 当前页面是 file:// 直接打开：浏览器会把来源记为 null，Ollama 对 null 来源返回 403，'+
+      (llm.enabled?'本地模型会调用失败并自动回退内置推演。':'本地模型不可用。')+
+      '<br>要用模型请改用 http 打开：在本文件所在目录执行 <code>python -m http.server 8000</code>，再访问 <code>http://127.0.0.1:8000/index.html</code>（或用预览面板打开）。点「测试连接」可查看完整排查步骤。','err');
+  }else{
+    setLlmStatus(llm.enabled
+      ? '已启用 '+esc(srcLabel(llm.call))+'；开坛时先给出完整内置推演，随后由本地模型覆盖。首次加载 7B 模型可能需 1 分钟左右。若连接失败，先确认服务是否启动、地址与模型名是否正确；若刚重启过 Ollama，再检查 OLLAMA_ORIGINS 是否随服务重启生效。'
+      : '当前使用内置推演（离线）。勾选上方开关即可启用 '+esc(llm.model)+'；首次加载 7B 模型可能需 1 分钟左右。','pending');
+  }
+  $('llmEnabled').addEventListener('change',function(){llm.enabled=this.checked;saveLlm();llmSyncUI();toast(llm.enabled?'已启用本地模型推演。':'已切回内置推演（离线）。');});
+  $('llmUrl').addEventListener('change',function(){llm.url=this.value.trim()||LLM_DEFAULT.url;this.value=llm.url;saveLlm();llmSyncUI();});
+  $('llmModel').addEventListener('change',function(){llm.model=this.value.trim()||LLM_DEFAULT.model;this.value=llm.model;saveLlm();llmSyncUI();});
+  $('llmCall').addEventListener('change',function(){llm.call=LLM_CALLS[this.value]?this.value:'single';saveLlm();llmSyncUI();});
+  $('llmTimeout').addEventListener('change',function(){var t=parseInt(this.value,10);llm.timeout=(isFinite(t)&&t>=5&&t<=600)?t:LLM_DEFAULT.timeout;this.value=llm.timeout;saveLlm();});
+  $('btnLlmTest').addEventListener('click',testLlm);
+}
+
+/* ============ 罗盘 ============ */
+function drawCompass(){
+  var svg='<circle cx="60" cy="60" r="56" fill="none" stroke="#ddd0b6" stroke-width="1"/>';
+  svg+='<circle cx="60" cy="60" r="26" fill="#f3ead8" stroke="#cdbb98" stroke-width="1"/>';
+  svg+='<text x="60" y="66" text-anchor="middle" font-size="17" fill="#8a5a2b" font-family="Songti SC,serif">谋</text>';
+  TAGS.forEach(function(t,i){
+    var ang=(-90+i*(360/7))*Math.PI/180;
+    var x=60+43*Math.cos(ang), y=60+43*Math.sin(ang);
+    svg+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="10.5" fill="'+TAG_COLOR[t]+'"/>';
+    svg+='<text x="'+x.toFixed(1)+'" y="'+(y+3.4).toFixed(1)+'" text-anchor="middle" font-size="10" fill="#fff" font-family="Songti SC,serif">'+t+'</text>';
+  });
+  $('compass').innerHTML=svg;
+}
+
+/* ============ 渲染：点将台 ============ */
+function renderAdvisors(){
+  $('advisorGrid').innerHTML=ADVISORS.map(function(a){
+    var on=state.on.has(a.id);
+    return '<article class="advisor '+(on?'':'off')+'" style="--c:'+TAG_COLOR[a.tag]+'">'+
+      '<div class="ad-top"><span class="tag">'+a.tag+'</span>'+
+      '<button class="pick '+(on?'on':'')+'" data-pick="'+a.id+'">'+(on?'出席':'列席')+'</button></div>'+
+      '<h3>'+a.name+'</h3><p class="school">'+a.school+'</p>'+
+      '<p class="one">'+a.domain+'</p>'+
+      '<button class="more" data-more="'+a.id+'">查看档案 ▾</button>'+
+      '<div class="detail" id="detail-'+a.id+'" hidden>'+
+        '<p><b>身份：</b>'+a.full+'，'+a.era+'；'+a.identity+'。</p>'+
+        '<p><b>标签：</b>'+a.tag+' · '+a.domain+'</p>'+
+        '<p><b>入选理由：</b>'+a.reason+'</p>'+
+        '<p><b>独特视角：</b>'+a.lens+'</p>'+
+        '<p class="quote">「'+a.quote+'」</p>'+
+      '</div></article>';
+  }).join('');
+}
+
+/* ============ 渲染：五道签题 ============ */
+var CN_NUM=['壹','贰','叁','肆','伍'];
+function renderQuestions(){
+  $('questionGrid').innerHTML=QUESTIONS.map(function(q,i){
+    return '<button class="qcard '+(state.selectedQ===i?'active':'')+'" data-q="'+i+'">'+
+      '<span class="qno">签 '+CN_NUM[i]+'</span><span class="qtag">'+q.tag+'</span>'+
+      '<span class="qtitle">'+q.title+'</span><span class="qtext">'+shortText(q.q,52)+'</span></button>';
+  }).join('');
+}
+
+/* ============ 渲染：模式 ============ */
+function renderModes(){
+  $('modeSel').innerHTML=Object.keys(MODES).map(function(k){
+    return '<button data-mode="'+k+'" class="'+(state.mode===k?'sel':'')+'">'+MODES[k].name+'</button>';
+  }).join('');
+  $('modeDesc').textContent=MODES[state.mode].desc;
+}
+
+function updateStats(){
+  $('statRound').textContent='议事 '+state.rounds+' 回合';
+  $('statUnlock').textContent='已请 '+state.unlocked.size+' / 7 位';
+}
+
+/* ============ 分类 / 判类 ============ */
+function classify(text){
+  var best='general', bestScore=0, hits=[];
+  Object.keys(SCENES).forEach(function(k){
+    var hit=SCENES[k].kw.filter(function(w){return text.indexOf(w)>=0;});
+    if(hit.length>bestScore){bestScore=hit.length;best=k;hits=hit;}
+  });
+  return {scene:best,hits:hits,name:SCENES[best].name};
+}
+function judge(text){
+  var v=$('judgeSel').value;
+  if(v==='choice')return 'choice';
+  if(v==='decision')return 'decision';
+  if(state.forcedScene)return 'choice';
+  return SHORT_WORDS.test(text)?'decision':'choice';
+}
+
+/* ============ 议事主流程（内置引擎 + 本地模型覆盖） ============ */
+function convene(){
+  if(llmBusy){toast('正在推演中，请稍候…');return;}
+  var q=$('questionInput').value.trim();
+  if(!q){toast('先写下你要问的事。');$('questionInput').focus();return;}
+  var cls=state.forcedScene?{scene:state.forcedScene,hits:['典型签题'],name:SCENES[state.forcedScene].name}:classify(q);
+  var kind=judge(q);
+  if(kind==='decision'&&!state.forceChoice){renderLight(q,cls);return;}
+  var team=ADVISORS.filter(function(a){return state.on.has(a.id);});
+  if(team.length<3){toast('至少点三位顾问，才可开坛议事。');return;}
+  state.forceChoice=false;
+  state.rounds++;
+  team.forEach(function(a){state.unlocked.add(a.id);});
+  updateStats();
+
+  var mode=state.mode;
+  var score=team.reduce(function(s,a){return s+a.stance;},0);
+  var avg=score/team.length;
+  var span=team.length*2||1;
+  var pct=Math.max(2,Math.min(98,Math.round(50+(score/span)*50)));
+  var voices={},voiceSrc={};
+  team.forEach(function(a){
+    voices[a.id]=(mode==='redteam'?a.invert[cls.scene]:a.voices[cls.scene]);
+    voiceSrc[a.id]='builtin';
+  });
+  var ctx={q:q,cls:cls,mode:mode,team:team,score:score,avg:avg,pct:pct,sign:pickSign(avg),round:state.rounds,
+    dims:DIMS_CHOICE.map(function(d){return '<div class="dim"><span>'+d[0]+'</span><b>'+d[1]+'</b></div>';}).join(''),
+    voices:voices,voiceSrc:voiceSrc,verdict:null,extra:'',call:null,autoSwitched:false,
+    src:'内置推演（离线）',settled:false,plain:'',
+    notice:llm.enabled
+      ? {kind:'',text:'正在请求 '+srcLabel(llm.call)+'… 已等待 0 秒（首次加载 7B 模型可能需 1 分钟左右）。上方为完整内置推演，可先阅读；若连接失败将自动回退内置推演。'}
+      : {kind:'',text:'本轮答案：内置推演（离线）· 本地模型未启用（可在上方勾选启用）。'}};
+
+  /* 先同步渲染完整内置结果：模型返回前即可阅读，任何失败都只是「不覆盖」 */
+  renderResult(ctx,false);
+  var rec={q:q,mode:MODES[mode].name,kind:'选择',cls:cls.name,plain:ctx.plain,src:ctx.src,srcNote:''};
+  pushLog(rec);
+  $('secResult').scrollIntoView({behavior:'smooth',block:'start'});
+  if(!llm.enabled)return;
+
+  setConveneBusy(true);
+  var finished=false,guard=null;
+  var done=function(){
+    if(finished)return;finished=true;
+    if(guard)clearTimeout(guard);
+    setConveneBusy(false);  /* 先停秒表，避免与最终重渲染竞争 */
+    try{
+      renderResult(ctx,true);
+      rec.src=ctx.src;rec.srcNote=(ctx.notice&&ctx.notice.text)||'';rec.plain=ctx.plain;
+      renderLog();
+    }catch(err){
+      ctx.src='内置推演（离线）';
+      try{$('resultBody').insertAdjacentHTML('afterbegin',
+        '<div class="llm-notice warn">'+esc('本地模型结果渲染异常，已回退内置推演（原因：'+((err&&err.message)||'未知')+'）')+'</div>');}catch(x){}
+    }
+  };
+  try{runLlm(ctx,done);}
+  catch(err){
+    ctx.src='内置推演（离线）';
+    ctx.notice={kind:'warn',text:'本地模型未响应，已回退内置推演（原因：'+humanLlmError(normErr(err))+'）'};
+    done();
+  }
+  /* 兜底：promise 链意外挂起时强制收口 */
+  if(!finished)guard=setTimeout(function(){
+    if(finished)return;
+    ctx.src='内置推演（离线）';ctx.extra='';ctx.verdict=null;
+    team.forEach(function(a){ctx.voiceSrc[a.id]='builtin';});
+    ctx.notice={kind:'warn',text:'本地模型未响应，已回退内置推演（原因：请求未在预期时间内结束）'};
+    done();
+  },(llm.timeout+15)*1000);
+}
+
+/* 依据 ctx 生成完整 HTML 与 Markdown 纯文本（单一数据源，显示与导出天然一致） */
+function buildResult(ctx){
+  var q=ctx.q,cls=ctx.cls,mode=ctx.mode,md=MODES[mode],team=ctx.team,pct=ctx.pct,sign=ctx.sign,rnd=ctx.round;
+  var html='',plain='',srcLine=ctx.src||'内置推演（离线）';
+  if(ctx.notice)html+='<div class="llm-notice '+(ctx.notice.kind||'')+'" id="llmNotice">'+esc(ctx.notice.text)+'</div>';
+  html+='<div class="issue"><div class="k">第 '+rnd+' 回合 · '+md.name+'</div><div class="q">'+esc(q)+'</div>'+
+    '<div class="meta">判类：这是一个【选择】 · 议题归类：'+cls.name+(cls.hits.length?'（命中：'+cls.hits.slice(0,4).join('、')+'）':'')+' · 出席 '+team.length+' 位 · 答案来源：'+esc(srcLine)+'</div></div>';
+  plain+='# 第 '+rnd+' 回合 · '+md.name+'\n\n议题：'+q+'\n判类：选择 ｜ 归类：'+cls.name+' ｜ 出席：'+team.map(function(a){return a.name+'('+a.tag+')';}).join('、')+'\n答案来源：'+srcLine+'\n'+
+    (ctx.notice?'说明：'+ctx.notice.text+'\n':'')+'\n';
+
+  html+='<div class="sec-title">四维判据</div><div class="dims">'+ctx.dims+'</div>';
+  plain+='## 四维判据\n'+DIMS_CHOICE.map(function(d){return '- '+d[0]+'：'+d[1];}).join('\n')+'\n\n';
+
+  html+='<div class="sec-title">阴阳之势</div><div class="balance"><div class="bar"><div class="needle" style="left:'+pct+'%"></div></div>'+
+    '<div class="ends"><span>◀ 阴 · 守成 '+ (100-pct) +'%</span><span>阳 · 进取 '+pct+'% ▶</span></div></div>';
+  plain+='## 阴阳之势\n进取 '+pct+'% / 守成 '+(100-pct)+'%\n\n';
+
+  var head={roundtable:'圆桌发言 · 分歧不予调和',redteam:'逆向红队 · 只列致命路径',consensus:'七位立场 · 随后收敛'}[mode];
+  html+='<div class="sec-title">'+head+'</div>';
+  plain+='## '+head+'\n\n';
+
+  team.forEach(function(a,i){
+    var text=ctx.voices[a.id];
+    var label=mode==='redteam'?'失败路径':(a.stance>0?'偏进':(a.stance<0?'偏守':'持中'));
+    var isModel=ctx.voiceSrc&&ctx.voiceSrc[a.id]==='model';
+    var badge='<span class="src-badge '+(isModel?'model':'')+'">'+(isModel?'模型生成':'内置推演')+'</span>';
+    html+='<div class="voice'+(ctx.settled?' settled':'')+'" data-vid="'+a.id+'" style="--c:'+TAG_COLOR[a.tag]+';animation-delay:'+(i*70)+'ms">'+
+      '<div class="vh"><span class="vn">'+a.name+'</span><span class="vt">'+a.tag+' · '+a.school+'</span><span class="vl">'+label+'</span>'+badge+'</div>'+
+      '<p>'+esc(text)+'</p></div>';
+    plain+='**'+a.name+'（'+a.tag+' · '+a.school+'）**［'+(isModel?'模型生成':'内置推演')+'］：'+text+'\n\n';
+  });
+
+  if(ctx.extra){
+    html+='<div class="llm-extra"><h4>模型补充意见（原文，未作分段解析）</h4><p>'+esc(ctx.extra)+'</p></div>';
+    plain+='## 模型补充意见（原文）\n'+ctx.extra+'\n\n';
+  }
+
+  if(mode==='roundtable'){
+    html+='<div class="callout"><h4>议事规则</h4>本轮刻意不调和分歧。'+esc(VERDICT[cls.scene].split)+' 请把冲突本身当作信息：分歧背后是不同的根本假设，而不是谁算错了。</div>';
+    plain+='> 保留分歧，不予调和。'+VERDICT[cls.scene].split+'\n\n';
+  }else if(mode==='redteam'){
+    var fixes=team.slice(0,3).map(function(a){return a.action;});
+    html+='<div class="callout"><h4>存活判定 · 未放行</h4><p>本轮共列出 <b>'+team.length+'</b> 条致命路径。在消除其中至少 <b>'+Math.ceil(team.length/2)+'</b> 条之前，方案不予放行。先拆这三条：</p><ul>'+
+      fixes.map(function(f){return '<li>'+esc(f)+'</li>';}).join('')+'</ul></div>';
+    plain+='## 存活判定 · 未放行\n共 '+team.length+' 条致命路径；消除至少 '+Math.ceil(team.length/2)+' 条前不予放行。\n'+fixes.map(function(f,i){return (i+1)+'. '+f;}).join('\n')+'\n\n';
+  }else{
+    var go=team.filter(function(a){return a.stance>0;}).map(function(a){return a.name;}).join('、')||'—';
+    var stay=team.filter(function(a){return a.stance<0;}).map(function(a){return a.name;}).join('、')||'—';
+    var vConcl=(ctx.verdict&&ctx.verdict.concl)?ctx.verdict.concl:VERDICT[cls.scene].key;
+    var vActs=(ctx.verdict&&ctx.verdict.acts&&ctx.verdict.acts.length)?ctx.verdict.acts:team.slice(0,5).map(function(a){return a.action;});
+    var modelConcl=!!(ctx.verdict&&ctx.verdict.concl),modelActs=!!(ctx.verdict&&ctx.verdict.acts&&ctx.verdict.acts.length);
+    html+='<div class="sec-title">共识与分歧</div><div class="split">'+
+      '<div><b>共识点</b><br>'+esc(VERDICT[cls.scene].common)+'</div>'+
+      '<div><b>分歧点</b><br>'+esc(VERDICT[cls.scene].split)+'</div></div>'+
+      '<div class="split" style="margin-top:9px"><div><b>进取方</b>：'+go+'</div><div><b>守成方</b>：'+stay+'</div></div>';
+    html+='<div class="callout"><h4>综合结论'+(modelConcl?' · 模型生成':'')+'</h4>'+esc(vConcl)+'</div>';
+    html+='<div class="callout"><h4>行动建议 · '+vActs.length+' 条'+(modelActs?' · 模型生成':'')+'</h4><ul>'+vActs.map(function(f){return '<li>'+esc(f)+'</li>';}).join('')+'</ul></div>';
+    plain+='## 共识与分歧\n共识：'+VERDICT[cls.scene].common+'\n分歧：'+VERDICT[cls.scene].split+'\n进取方：'+go+' ｜ 守成方：'+stay+'\n\n';
+    plain+='## 综合结论'+(modelConcl?'（模型生成）':'')+'\n'+vConcl+'\n\n## 行动建议'+(modelActs?'（模型生成）':'')+'\n'+vActs.map(function(f,i){return (i+1)+'. '+f;}).join('\n')+'\n\n';
+  }
+
+  html+='<div class="sign"><small>第 '+rnd+' 签 · '+md.name+'</small>'+sign+'</div>';
+  html+='<p class="disclaim">最终决定权与责任在你本人；涉及投资 / 医疗 / 法律，请咨询持牌专业人士。</p>';
+  plain+='签：'+sign+'\n\n（最终决定权与责任在你本人；本推演不构成专业建议。）\n';
+  return {html:html,plain:plain};
+}
+function renderResult(ctx,settled){
+  ctx.settled=!!settled;
+  var r=buildResult(ctx);
+  ctx.plain=r.plain;
+  $('resultBody').innerHTML=r.html;
+  $('secResult').hidden=false;
+}
+
+/* 快速探活：仅在服务明确连不上时短路，避免默认开启下干等长超时。
+   探活超时或任何可疑情况一律放行给主请求，绝不误伤正常路径。 */
+function ollamaProbe(){
+  var ctrl=(typeof AbortController!=='undefined')?new AbortController():null;
+  var opts={method:'GET'};if(ctrl)opts.signal=ctrl.signal;
+  return new Promise(function(resolve){
+    var settled=false,timer=null;
+    var finish=function(v){if(settled)return;settled=true;if(timer)clearTimeout(timer);resolve(v);};
+    timer=setTimeout(function(){if(ctrl){try{ctrl.abort();}catch(x){}}finish({skip:false});},3000);
+    var fp;
+    try{fp=fetch(apiBase()+'/api/tags',opts);}catch(e){fp=Promise.reject(e);}
+    fp.then(function(r){
+      if(!r.ok){finish({skip:true,reason:'服务返回 HTTP '+r.status+'（确认 ollama serve 正在运行）'});return;}
+      finish({skip:false});
+    }).catch(function(e){
+      if(e&&e.name==='AbortError')return;
+      finish({skip:true,reason:humanLlmError(normErr(e))});
+    });
+  });
+}
+
+/* 三种调用分支：single / per / verdict；失败一律内部消化，不向外抛 */
+function runLlm(ctx,done){
+  var call=llm.call;
+  if(call==='verdict'&&ctx.mode!=='consensus'){ctx.autoSwitched=true;call='single';}
+  ctx.call=call;
+  ollamaProbe().then(function(probe){
+    if(probe&&probe.skip){
+      ctx.src='内置推演（离线）';
+      ctx.notice={kind:'warn',text:'本地模型未响应，已回退内置推演（原因：'+probe.reason+'；上方为完整内置推演）'};
+      done(false);return null;
+    }
+    return callModel(ctx,call,done);
+  }).catch(function(err){
+    ctx.src='内置推演（离线）';
+    ctx.notice={kind:'warn',text:'本地模型未响应，已回退内置推演（原因：'+humanLlmError(normErr(err))+'）'};
+    done(false);
+  });
+}
+
+function callModel(ctx,call,done){
+  var q=ctx.q,team=ctx.team,mode=ctx.mode,cls=ctx.cls,p;
+  try{
+    if(call==='per'){
+      var tasks=team.map(function(a){
+        return ollamaChat([{role:'system',content:sysPer(a,mode,cls)},{role:'user',content:q}],llm.timeout)
+          .then(function(t){return {id:a.id,text:t,ok:true};})
+          .catch(function(e){return {id:a.id,ok:false,err:humanLlmError(normErr(e))};});
+      });
+      p=Promise.all(tasks).then(function(rs){
+        var voices={},okCount=0,failCount=0,firstErr='';
+        rs.forEach(function(r){if(r.ok&&r.text&&r.text.trim()){voices[r.id]=r.text.trim();okCount++;}else{failCount++;if(!firstErr)firstErr=r.err||'该位未返回内容';}});
+        return {voices:voices,okCount:okCount,failCount:failCount,firstErr:firstErr,rawText:'',verdict:null};
+      });
+    }else{
+      var sys=(call==='verdict')?sysVerdict(team,mode,cls):sysSingle(team,mode,cls);
+      p=ollamaChat([{role:'system',content:sys},{role:'user',content:q}],llm.timeout)
+        .then(function(t){
+          return {voices:(call==='verdict')?{}:parseVoices(t,team),
+            verdict:(call==='verdict')?parseVerdict(t):null,
+            rawText:t,okCount:1,failCount:0,firstErr:''};
+        });
+    }
+  }catch(err){
+    p=Promise.resolve({voices:{},verdict:null,rawText:'',okCount:0,failCount:team.length,firstErr:humanLlmError(normErr(err))});
+  }
+  return p.then(function(res){
+    try{applyLlmResult(ctx,res,done);}
+    catch(err){
+      ctx.src='内置推演（离线）';
+      ctx.notice={kind:'warn',text:'本地模型未响应，已回退内置推演（原因：结果处理异常 '+((err&&err.message)||'未知')+'）'};
+      done(false);
+    }
+  }).catch(function(err){
+    ctx.src='内置推演（离线）';
+    ctx.notice={kind:'warn',text:'本地模型未响应，已回退内置推演（原因：'+humanLlmError(normErr(err))+'）'};
+    done(false);
+  });
+}
+
+function applyLlmResult(ctx,res,done){
+  var modelHit=0,fallback=0;
+  ctx.voiceSrc={};
+  ctx.team.forEach(function(a){
+    var t=res.voices&&res.voices[a.id];
+    if(t&&t.trim()){ctx.voices[a.id]=t.trim();ctx.voiceSrc[a.id]='model';modelHit++;}
+    else{ctx.voiceSrc[a.id]='builtin';fallback++;}
+  });
+  ctx.extra='';
+  var switched=ctx.autoSwitched?'｜已选「仅补结论」，但当前非「共识收敛」模式，本轮自动按「单次成篇」处理':'';
+  if(ctx.call==='verdict'){
+    if(res.verdict&&res.verdict.concl){
+      ctx.verdict={concl:res.verdict.concl,acts:(res.verdict.acts.length?res.verdict.acts:null)};
+      ctx.src=srcLabel('verdict')+' · 结论与建议由模型生成，七位发言为内置推演';
+      ctx.notice={kind:'ok',text:'本轮答案：'+ctx.src};
+      done(true);return;
+    }
+    ctx.src='内置推演（离线）';
+    if(res.rawText)ctx.extra=res.rawText;
+    ctx.notice={kind:'warn',text:'本地模型未响应，已回退内置推演（原因：结论解析失败，模型全文已保留）'};
+    done(false);return;
+  }
+  if(modelHit===0&&res.rawText){
+    ctx.extra=res.rawText;
+    ctx.src='内置推演（离线）+ 本地模型补充意见';
+    ctx.notice={kind:'warn',text:'本地模型未响应，已回退内置推演（原因：模型输出未能解析为逐位分段，全文已作为「模型补充意见」完整保留）'+switched};
+    done(false);return;
+  }
+  if(modelHit>0){
+    ctx.src=srcLabel(ctx.call)+' · '+modelHit+'/'+ctx.team.length+' 位由模型生成，'+fallback+' 位内置回退';
+    var why='';
+    if(fallback>0&&ctx.call==='per'&&res.firstErr)why='（部分失败：'+res.firstErr+'）';
+    else if(fallback>0&&ctx.call==='single')why='（未解析到的段落保留内置台词）';
+    ctx.notice={kind:'ok',text:'本轮答案：'+ctx.src+why+switched};
+    done(true);
+  }else{
+    ctx.src='内置推演（离线）';
+    ctx.notice={kind:'warn',text:'本地模型未响应，已回退内置推演（原因：'+(res.firstErr||'未生成任何可用段落')+'）'+switched};
+    done(false);
+  }
+}
+
+/* 执行层「决定」的轻处理 */
+function renderLight(q,cls){
+  state.rounds++;updateStats();
+  var dims=DIMS_DECISION.map(function(d){return '<div class="dim"><span>'+d[0]+'</span><b>'+d[1]+'</b></div>';}).join('');
+  var html='<div class="issue"><div class="k">第 '+state.rounds+' 回合 · 轻处理</div><div class="q">'+esc(q)+'</div>'+
+    '<div class="meta">判类：这是一个【决定】 · 议题归类：'+cls.name+'</div></div>'+
+    '<div class="sec-title">四维判据</div><div class="dims">'+dims+'</div>'+
+    '<div class="callout"><h4>不召集全员</h4><p>这属于执行层决定：可逆、局部、高频、影响数天。按规矩不给它整套七人推演，权重较低，别把日常小事包装成人生抉择。</p>'+
+    '<ul><li>先按你已有的习惯或默认规则处理，不额外消耗判断力。</li><li>若它反复出现、开始占用心力，再回来检查是不是背后藏着一个真正的「选择」。</li></ul></div>'+
+    '<div style="margin-top:14px"><button class="btn" id="btnUpgrade">仍要召集全员，按「选择」处理</button></div>'+
+    '<p class="disclaim">最终决定权与责任在你本人。</p>';
+  $('resultBody').innerHTML=html;
+  $('secResult').hidden=false;
+  pushLog({q:q,mode:'轻处理（决定）',kind:'决定',cls:cls.name,
+    plain:'判类：决定（执行层）\n\n不启动七人推演。建议：按默认规则处理；若反复出现，检查背后是否藏着一个真正的「选择」。\n'});
+  $('btnUpgrade').addEventListener('click',function(){state.forceChoice=true;convene();});
+  $('secResult').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ============ 议事录 ============ */
+function pushLog(rec){
+  rec.time=new Date().toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+  if(!rec.src)rec.src='内置推演（离线）';
+  if(!rec.srcNote)rec.srcNote='';
+  state.log.unshift(rec);renderLog();
+}
+function renderLog(){
+  if(!state.log.length){$('logList').innerHTML='<div class="empty">尚无议事记录。</div>';return;}
+  $('logList').innerHTML=state.log.slice(0,8).map(function(r,i){
+    return '<div class="log-item"><div class="lh"><span>'+esc(r.time)+'</span><span>'+esc(r.mode)+'</span>'+
+      '<span>'+esc(r.kind)+'</span><span>'+esc(r.cls)+'</span><span>'+esc(r.src||'内置推演（离线）')+'</span></div>'+
+      '<div class="lt">'+esc(shortText(r.q,78))+'</div></div>';
+  }).join('');
+}
+function exportLog(){
+  if(!state.log.length){toast('还没有可导出的议事记录。');return;}
+  var out='# 七曜智囊团 · 议事录\n\n导出时间：'+new Date().toLocaleString('zh-CN')+'\n\n';
+  state.log.slice().reverse().forEach(function(r,i){
+    out+='---\n\n## 第 '+(i+1)+' 则 · '+r.time+' · '+r.mode+'\n\n议题：'+r.q+'\n归类：'+r.cls+' ｜ 判类：'+r.kind+'\n答案来源：'+(r.src||'内置推演（离线）')+'\n'+(r.srcNote?'说明：'+r.srcNote+'\n':'')+'\n'+r.plain+'\n';
+  });
+  out+='---\n\n最终决定权与责任在你本人；本推演不构成投资 / 医疗 / 法律专业建议。\n';
+  var blob=new Blob([out],{type:'text/markdown;charset=utf-8'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  var d=new Date();
+  a.download='七曜智囊团议事录-'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'.md';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(function(){URL.revokeObjectURL(a.href);},1000);
+  toast('议事录已导出。');
+}
+
+/* ============ 事件绑定 ============ */
+function bind(){
+  $('advisorGrid').addEventListener('click',function(e){
+    var pk=e.target.closest('[data-pick]'),mo=e.target.closest('[data-more]');
+    if(pk){
+      var id=pk.getAttribute('data-pick');
+      if(state.on.has(id)){state.on.delete(id);}else{state.on.add(id);}
+      renderAdvisors();
+    }else if(mo){
+      var d=$('detail-'+mo.getAttribute('data-more'));
+      d.hidden=!d.hidden;
+      mo.textContent=d.hidden?'查看档案 ▾':'收起档案 ▴';
+    }
+  });
+  $('btnAll').addEventListener('click',function(){state.on=new Set(ADVISORS.map(function(a){return a.id;}));renderAdvisors();toast('七位全员出席。');});
+  $('btnPolar').addEventListener('click',function(){state.on=new Set(['xiong','taleb']);renderAdvisors();toast('只请阴阳两位——不足三位，可再点将补位。');});
+  $('btnRandom').addEventListener('click',function(){
+    var pool=ADVISORS.slice();
+    for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=pool[i];pool[i]=pool[j];pool[j]=t;}
+    var n=3+Math.floor(Math.random()*3);
+    state.on=new Set(pool.slice(0,n).map(function(a){return a.id;}));
+    renderAdvisors();toast('随机点将 '+n+' 位，阵容已改变。');
+  });
+  $('questionGrid').addEventListener('click',function(e){
+    var b=e.target.closest('[data-q]');if(!b)return;
+    var i=+b.getAttribute('data-q');
+    state.selectedQ=i;state.forcedScene=QUESTIONS[i].scene;state.forceChoice=false;
+    $('questionInput').value=QUESTIONS[i].q;
+    renderQuestions();
+    $('sec-ask').scrollIntoView({behavior:'smooth',block:'center'});
+    toast('已取「签 '+CN_NUM[i]+'」，可改文字或直接召集议事。');
+  });
+  $('questionInput').addEventListener('input',function(){state.forcedScene=null;state.selectedQ=-1;state.forceChoice=false;renderQuestions();});
+  $('modeSel').addEventListener('click',function(e){
+    var b=e.target.closest('[data-mode]');if(!b)return;
+    state.mode=b.getAttribute('data-mode');renderModes();
+  });
+  $('btnConvene').addEventListener('click',convene);
+  $('btnExport').addEventListener('click',exportLog);
+  $('btnClearLog').addEventListener('click',function(){state.log=[];renderLog();toast('议事录已清空。');});
+  $('questionInput').addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();convene();}
+  });
+}
+
+/* ============ 启动 ============ */
+drawCompass();renderAdvisors();renderQuestions();renderModes();updateStats();renderLog();bind();initLlm();
+</script>
+</body>
+</html>

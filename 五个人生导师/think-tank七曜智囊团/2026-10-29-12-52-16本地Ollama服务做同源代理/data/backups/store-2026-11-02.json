@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "createdAt": "2026-10-29T05:18:11.779Z",
+  "notes": [
+    {
+      "id": "n_mvtczhw1ffmm4",
+      "title": "深圳高交会",
+      "content": "11月26日至28日深圳高交会",
+      "type": "meeting",
+      "tags": [
+        "科技展会",
+        "商务活动",
+        "随手记"
+      ],
+      "summary": "参加深圳高交会，了解最新科技趋势。",
+      "keyPoints": [
+        "11月26日至28日"
+      ],
+      "entities": [
+        "深圳高交会"
+      ],
+      "links": [],
+      "linkScores": {},
+      "source": "quick",
+      "pinned": true,
+      "archived": false,
+      "createdAt": "2026-10-29T09:46:33.173Z",
+      "updatedAt": "2026-10-29T09:46:33.173Z",
+      "ai": {
+        "processed": true,
+        "mode": "llm",
+        "model": "qwen2.5:7b",
+        "at": "2026-10-29T09:46:45.704Z"
+      }
+    }
+  ],
+  "todos": [
+    {
+      "id": "t_mvtd3v73leoer",
+      "text": "高交会",
+      "done": false,
+      "due": "2026-11-26",
+      "priority": "high",
+      "noteId": null,
+      "auto": false,
+      "createdAt": "2026-10-29T09:49:57.039Z",
+      "completedAt": null,
+      "remindedAt": null,
+      "remindAt": "2026-11-25T10:30"
+    }
+  ],
+  "summaries": [],
+  "chats": [
+    {
+      "id": "c_mvtd8vxh",
+      "question": "总结一下《深圳高交会》的要点",
+      "answer": "深圳高交会的要点如下：\n- 日期：2026年11月26日至28日\n- 类型：科技展会、商务活动\n\n[1] 摘要：参加深圳高交会，了解最新科技趋势。",
+      "citations": [
+        {
+          "index": 1,
+          "id": "n_mvtczhw1ffmm4",
+          "title": "深圳高交会",
+          "type": "meeting",
+          "date": "2026-10-29",
+          "summary": "参加深圳高交会，了解最新科技趋势。",
+          "tags": [
+            "科技展会",
+            "商务活动",
+            "随手记"
+          ]
+        }
+      ],
+      "mode": "llm",
+      "createdAt": "2026-10-29T09:54:02.850Z"
+    }
+  ],
+  "settings": {
+    "provider": "ollama",
+    "baseUrl": "http://127.0.0.1:11434",
+    "chatModel": "qwen2.5:7b",
+    "embedModel": "bge-m3",
+    "useEmbeddings": false,
+    "temperature": 0.3,
+    "autoClassify": true,
+    "apiKey": ""
+  },
+  "meta": {
+    "seeded": true,
+    "demoCleared": true
+  }
+}

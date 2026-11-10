@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>苏格拉底提问法 · 交互演示</title>
+<style>
+  :root {
+    --bg: #f6f5f1;
+    --card: #ffffff;
+    --ink: #2b2b2b;
+    --ink-soft: #6b6b6b;
+    --ink-faint: #9a9a9a;
+    --accent: #5b7c6e;
+    --accent-dark: #44604f;
+    --accent-soft: #e8efeb;
+    --border: #e6e2d8;
+    --user-bubble: #5b7c6e;
+    --user-bubble-ink: #ffffff;
+    --assistant-bubble: #ffffff;
+    --warn: #a06b3c;
+    --line: #ece8df;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.7;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand .mark {
+    width: 34px; height: 34px; border-radius: 9px;
+    background: var(--accent); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 18px;
+  }
+  .brand h1 { font-size: 17px; font-weight: 600; }
+  .brand p { font-size: 12px; color: var(--ink-faint); }
+
+  .status { font-size: 13px; color: var(--accent-dark); font-weight: 500; }
+  .status .dot {
+    display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent); margin-right: 6px;
+    animation: pulse 1.6s ease infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
+  .wrap { flex: 1; overflow-y: auto; padding: 28px 0; }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+  /* 设置区 */
+  .setup-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 26px 28px; margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.03);
+  }
+  .setup-card h2 { font-size: 16px; margin-bottom: 6px; }
+  .setup-card .sub { font-size: 13px; color: var(--ink-soft); margin-bottom: 18px; }
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 13px; color: var(--ink-soft); margin-bottom: 6px; font-weight: 500; }
+  .field input, .field textarea, .field select {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--border);
+    border-radius: 9px; font-size: 14px; font-family: inherit; color: var(--ink);
+    background: #fbfaf7; resize: vertical;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus {
+    outline: none; border-color: var(--accent); background: #fff;
+  }
+  .row { display: flex; gap: 16px; }
+  .row .field { flex: 1; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 22px; border: none; border-radius: 10px;
+    background: var(--accent); color: #fff; font-size: 15px; font-weight: 600;
+    cursor: pointer; font-family: inherit; transition: background .15s;
+  }
+  .btn:hover { background: var(--accent-dark); }
+  .btn:disabled { background: #c9c9c3; cursor: not-allowed; }
+  .btn.ghost {
+    background: transparent; color: var(--accent-dark);
+    border: 1px solid var(--border);
+  }
+  .btn.ghost:hover { background: var(--accent-soft); }
+
+  /* 对话区 */
+  .chat { display: flex; flex-direction: column; gap: 16px; }
+  .msg { display: flex; gap: 12px; max-width: 88%; }
+  .msg.user { align-self: flex-end; flex-direction: row-reverse; }
+  .msg.assistant { align-self: flex-start; }
+  .avatar {
+    width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700;
+  }
+  .msg.assistant .avatar { background: var(--accent-soft); color: var(--accent-dark); }
+  .msg.user .avatar { background: #dfe8f0; color: #4a6b8a; }
+  .bubble {
+    padding: 12px 16px; border-radius: 14px; font-size: 15px;
+    position: relative;
+  }
+  .msg.assistant .bubble {
+    background: var(--assistant-bubble); border: 1px solid var(--border);
+    border-top-left-radius: 4px;
+  }
+  .msg.user .bubble {
+    background: var(--user-bubble); color: var(--user-bubble-ink);
+    border-top-right-radius: 4px;
+  }
+  .msg .meta { font-size: 11px; color: var(--ink-faint); margin-top: 6px; }
+  .msg.user .meta { text-align: right; color: rgba(255,255,255,.65); }
+
+  .qtype {
+    display: inline-block; font-size: 11px; font-weight: 600;
+    padding: 2px 8px; border-radius: 20px; margin-bottom: 8px;
+    background: var(--accent-soft); color: var(--accent-dark);
+  }
+
+  /* 反思总结卡片 */
+  .summary-card {
+    background: linear-gradient(135deg, #f2f0ea, #e8efeb);
+    border: 1px solid var(--border); border-radius: 16px;
+    padding: 24px 28px; margin-top: 8px;
+  }
+  .summary-card h3 { font-size: 15px; margin-bottom: 14px; color: var(--accent-dark); }
+  .summary-card .block { margin-bottom: 12px; }
+  .summary-card .label { font-size: 12px; color: var(--ink-faint); margin-bottom: 4px; font-weight: 600; }
+  .summary-card ul { list-style: none; padding-left: 0; }
+  .summary-card ul li { font-size: 14px; padding: 4px 0 4px 20px; position: relative; }
+  .summary-card ul li::before { content: "·"; position: absolute; left: 6px; color: var(--accent); font-weight: 700; }
+
+  /* 输入区 */
+  .inputbar {
+    flex-shrink: 0; background: var(--card);
+    border-top: 1px solid var(--border); padding: 16px 0;
+  }
+  .inputbar .container { display: flex; gap: 12px; align-items: flex-end; }
+  .inputbar textarea {
+    flex: 1; padding: 12px 14px; border: 1px solid var(--border);
+    border-radius: 12px; font-size: 15px; font-family: inherit; color: var(--ink);
+    resize: none; min-height: 48px; max-height: 140px; background: #fbfaf7;
+  }
+  .inputbar textarea:focus { outline: none; border-color: var(--accent); background: #fff; }
+  .inputbar .btn { padding: 12px 22px; height: 48px; }
+
+  .hint { font-size: 12px; color: var(--ink-faint); margin-top: 8px; }
+
+  .hidden { display: none !important; }
+  .fade-in { animation: fade .35s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  .typing { display: flex; gap: 4px; padding: 6px 2px; }
+  .typing span { width: 7px; height: 7px; border-radius: 50%; background: var(--ink-faint); animation: bounce 1.2s infinite; }
+  .typing span:nth-child(2) { animation-delay: .15s; }
+  .typing span:nth-child(3) { animation-delay: .3s; }
+  @keyframes bounce { 0%,60%,100% { transform: none; opacity:.4;} 30% { transform: translateY(-4px); opacity:1; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="mark">问</div>
+    <div>
+      <h1>苏格拉底提问法 · 交互演示</h1>
+      <p>引导式追问，而非给出答案</p>
+    </div>
+  </div>
+  <div class="status hidden" id="status"><span class="dot"></span>追问中</div>
+</header>
+
+<div class="wrap" id="scrollWrap">
+  <div class="container">
+
+    <!-- 设置卡片 -->
+    <div class="setup-card" id="setupCard">
+      <h2>开始一场苏格拉底式对话</h2>
+      <p class="sub">告诉我你想被引导思考的主题，我会通过追问帮你厘清自己的想法。</p>
+
+      <div class="field">
+        <label>主题 *</label>
+        <textarea id="topicInput" rows="3" placeholder="例：远程办公比坐班更高效 / 我应该跳槽吗 / 什么是真正的自由……"></textarea>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>追问轮次上限</label>
+          <select id="maxRounds">
+            <option value="3">3 轮</option>
+            <option value="5" selected>5 轮</option>
+            <option value="7">7 轮</option>
+            <option value="10">10 轮</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>语气</label>
+          <select id="tone">
+            <option value="neutral" selected>中立</option>
+            <option value="gentle">温和</option>
+            <option value="encouraging">鼓励</option>
+            <option value="skeptical">审慎</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>受众水平</label>
+        <select id="audience">
+          <option value="general" selected>一般</option>
+          <option value="beginner">初学者</option>
+          <option value="advanced">进阶</option>
+        </select>
+      </div>
+
+      <button class="btn" id="startBtn">开始对话 →</button>
+    </div>
+
+    <!-- 对话区 -->
+    <div class="chat hidden" id="chat"></div>
+
+  </div>
+</div>
+
+<!-- 输入区 -->
+<div class="inputbar hidden" id="inputBar">
+  <div class="container">
+    <textarea id="replyInput" rows="1" placeholder="输入你的回答…（回车发送，Shift+回车换行）"></textarea>
+    <button class="btn" id="sendBtn">发送</button>
+  </div>
+  <div class="container hint" id="hintBar">想提前结束？回复「结束」即可生成反思总结。</div>
+</div>
+
+<script>
+(function () {
+  // ===== 提问话术库（五类）=====
+  const BANK = {
+    clarify: [ // 澄清概念
+      "你说的「{x}」，具体指什么？能给我一个更精确的定义吗？",
+      "当你说「{x}」时，你指的是它的哪一层含义？",
+      "你所说的「{x}」，包含哪些具体内容，又不包含哪些？",
+      "「{x}」的判断标准或衡量尺度，在你心里是什么？",
+      "能不能用一个具体的例子，让我明白你说的「{x}」长什么样？",
+      "「{x}」这个说法里，哪个词是最关键、最不能含糊的？",
+      "你说的「{x}」，是在什么情境下成立、什么情境下不成立？",
+      "能否把「{x}」拆成更小、更具体的一部分来说？"
+    ],
+    evidence: [ // 检验证据
+      "是什么让你得出这个判断？能说说你的依据吗？",
+      "有没有具体的事例、经历或数据，能支撑「{x}」这一点？",
+      "你的这个想法，最早是怎么形成的？",
+      "支撑这个结论的依据，是你亲身经历，还是听来的 / 读来的？",
+      "如果给这个观点打分（1–10），你的把握有多大？这份把握来自哪里？",
+      "这个判断里，有多少是基于事实，多少是基于感受？",
+      "有没有反过来的情况——你见过与「{x}」相反的例子吗？",
+      "如果这个依据被证明不成立，你的结论会怎么变？"
+    ],
+    assumption: [ // 挑战假设
+      "你的这个结论，似乎隐含着一个前提——你愿意先看看这个前提是否一定成立吗？",
+      "你有没有一个「想当然」、但从未真正检验过的假设藏在背后？",
+      "如果这个前提不成立，你的结论还站得住吗？",
+      "你为什么会默认「{x}」一定是这样？",
+      "这件事上，你是不是把「相关」当成了「因果」？",
+      "你的判断里，哪些是「事实」，哪些其实只是「你相信它如此」？",
+      "这个想法成立，需要依赖哪些条件？这些条件现实吗？",
+      "如果必须为你的观点找出一个最脆弱的假设，你会指哪一个？"
+    ],
+    alternative: [ // 探索替代视角
+      "如果站在相反的立场，最有力的反驳会是什么？",
+      "一个和你看法完全不同的人，会怎么描述「{x}」这件事？",
+      "有没有另一种解释，同样能说明你看到的现象？",
+      "除了你现在的做法，还有哪些别的选择你没有考虑过？",
+      "换一个场景或条件下，你的这个结论还成立吗？",
+      "有没有一个「中间地带」或第三种可能，介于你对立的两个选项之间？",
+      "如果是你尊重或信任的某个人，他/她会怎么看这件事？",
+      "如果必须证明自己是错的，你会从哪个角度去挑自己的毛病？"
+    ],
+    reflection: [ // 引导反思
+      "经过这几轮，你最初的想法有没有发生一点点变化？",
+      "现在再看你最开始的那句话，你还会一字不差地坚持吗？",
+      "你在思考这件事的过程中，最难回答的是哪个问题？为什么？",
+      "有没有哪个瞬间，你意识到自己之前的理解其实不够准确？",
+      "你对这件事的「感受」和「理性判断」，此刻是一致的吗？",
+      "如果让你用一句话概括现在的想法，和一开始有什么不同？",
+      "这件事想清楚之后，你下一步打算怎么行动？",
+      "你觉得自己现在离「想清楚」还有多远？还差什么？"
+    ]
+  };
+
+  // 语气修饰前缀
+  const TONE = {
+    neutral: "",
+    gentle: "不用着急，慢慢想：",
+    encouraging: "这个问题可能会帮你打开思路：",
+    skeptical: "我们不妨更严格一点来看："
+  };
+
+  // 类别顺序（渐进）
+  const ORDER = ["clarify", "evidence", "assumption", "alternative", "reflection"];
+  const TYPE_LABEL = {
+    clarify: "澄清概念",
+    evidence: "检验证据",
+    assumption: "挑战假设",
+    alternative: "替代视角",
+    reflection: "引导反思"
+  };
+
+  // ===== 状态 =====
+  let state = {
+    topic: "",
+    maxRounds: 5,
+    tone: "neutral",
+    audience: "general",
+    round: 0,            // 已提问题数
+    categoryIdx: 0,      // 当前类别在 ORDER 中的位置
+    usedQ: {},           // 每类已用问句下标
+    answers: [],         // 用户回答记录 {text}
+    history: [],         // 用于反思总结的对话记录
+    ended: false
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const chatEl = $("chat");
+  const wrap = $("scrollWrap");
+  const setupCard = $("setupCard");
+  const inputBar = $("inputBar");
+  const replyInput = $("replyInput");
+  const statusEl = $("status");
+
+  function scrollBottom() {
+    wrap.scrollTo({ top: wrap.scrollHeight, behavior: "smooth" });
+  }
+
+  function addMessage(role, html, opts = {}) {
+    const div = document.createElement("div");
+    div.className = "msg " + role + " fade-in";
+    const avatar = document.createElement("div");
+    avatar.className = "avatar";
+    avatar.textContent = role === "user" ? "我" : "问";
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.innerHTML = html;
+    if (opts.meta) {
+      const meta = document.createElement("div");
+      meta.className = "meta";
+      meta.textContent = opts.meta;
+      bubble.appendChild(meta);
+    }
+    div.appendChild(avatar);
+    div.appendChild(bubble);
+    chatEl.appendChild(div);
+    scrollBottom();
+    return div;
+  }
+
+  function showTyping() {
+    const div = document.createElement("div");
+    div.className = "msg assistant fade-in";
+    div.id = "typingMsg";
+    const avatar = document.createElement("div");
+    avatar.className = "avatar";
+    avatar.textContent = "问";
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+    div.appendChild(avatar);
+    div.appendChild(bubble);
+    chatEl.appendChild(div);
+    scrollBottom();
+    return div;
+  }
+  function removeTyping() {
+    const t = $("typingMsg");
+    if (t) t.remove();
+  }
+
+  // 提取主题中最关键的一个词作为 {x} 占位
+  function extractKeyword(topic) {
+    const cleaned = topic.replace(/[？?。！!，,、：:；;]/g, " ").trim();
+    const words = cleaned.split(/\s+/).filter(Boolean);
+    if (words.length === 0) return "这件事";
+    // 取最长词（更可能是核心概念）
+    return words.sort((a, b) => b.length - a.length)[0];
+  }
+
+  // 生成下一个问题
+  function nextQuestion() {
+    const keyword = extractKeyword(state.topic);
+    // 决定类别：按渐进顺序，但到后期偏反思
+    let cat;
+    if (state.round >= state.maxRounds - 1) {
+      cat = "reflection"; // 最后一轮用反思
+    } else {
+      cat = ORDER[state.categoryIdx % ORDER.length];
+    }
+    // 选一条未用过的问句
+    if (!state.usedQ[cat]) state.usedQ[cat] = [];
+    let pool = BANK[cat].filter((_, i) => !state.usedQ[cat].includes(i));
+    if (pool.length === 0) { pool = BANK[cat]; state.usedQ[cat] = []; }
+    const idx = BANK[cat].indexOf(pool[Math.floor(Math.random() * pool.length)]);
+    state.usedQ[cat].push(idx);
+
+    let q = BANK[cat][idx].replace(/\{x\}/g, keyword);
+    const prefix = TONE[state.tone] || "";
+    return { cat, text: prefix + q };
+  }
+
+  function startConversation() {
+    const topic = $("topicInput").value.trim();
+    if (!topic) { $("topicInput").focus(); return; }
+
+    state.topic = topic;
+    state.maxRounds = parseInt($("maxRounds").value, 10);
+    state.tone = $("tone").value;
+    state.audience = $("audience").value;
+    state.round = 0;
+    state.categoryIdx = 0;
+    state.usedQ = {};
+    state.answers = [];
+    state.history = [];
+    state.ended = false;
+
+    setupCard.classList.add("hidden");
+    chatEl.classList.remove("hidden");
+    inputBar.classList.remove("hidden");
+    statusEl.classList.remove("hidden");
+    chatEl.innerHTML = "";
+
+    // 开场白
+    addMessage("assistant",
+      '我们来围绕「<strong>' + escapeHtml(topic) + '</strong>」展开思考。我不给答案，只负责提问，答案由你自己得出。');
+
+    askNext();
+  }
+
+  function askNext() {
+    if (state.ended) return;
+    const typing = showTyping();
+    setTimeout(() => {
+      removeTyping();
+      const { cat, text } = nextQuestion();
+      state.round++;
+      state.categoryIdx++;
+      state.history.push({ role: "assistant", text, cat });
+      addMessage("assistant",
+        '<span class="qtype">' + TYPE_LABEL[cat] + '</span><br>' + escapeHtml(text),
+        { meta: "第 " + state.round + " / " + state.maxRounds + " 轮" });
+      replyInput.focus();
+    }, 600);
+  }
+
+  function handleReply() {
+    const text = replyInput.value.trim();
+    if (!text) return;
+
+    replyInput.value = "";
+    state.answers.push(text);
+    state.history.push({ role: "user", text });
+    addMessage("user", escapeHtml(text));
+
+    // 结束条件判断
+    const lower = text.toLowerCase();
+    if (lower === "结束" || lower === "end" || lower === "算了" ||
+        lower.includes("结束吧") || lower.includes("到这里") ||
+        lower.includes("直接告诉我") || lower.includes("别问了")) {
+      if (lower.includes("直接告诉我") || lower.includes("别问了")) {
+        // 用户要直接答案：给一句中性提示，但仍不代答
+        addMessage("assistant",
+          '明白，你希望直接得到看法。我的中性立场是：这个问题没有标准答案，关键变量恰恰是刚才几轮里你自己浮现出的那几个前提。是否成立，仍要由你判断。下面为你整理反思总结。');
+      }
+      finishSummary();
+      return;
+    }
+
+    if (state.round >= state.maxRounds) {
+      finishSummary();
+      return;
+    }
+
+    askNext();
+  }
+
+  function finishSummary() {
+    state.ended = true;
+    statusEl.innerHTML = "已结束";
+    inputBar.classList.add("hidden");
+
+    const n = state.answers.length;
+    const keyAns = state.answers.slice(-3); // 最近几次回答作为关键节点
+    const firstAns = state.answers[0] || "";
+
+    let html = '<h3>📋 反思总结</h3>';
+    html += '<div class="block"><div class="label">我们探讨的主题</div>' + escapeHtml(state.topic) + '</div>';
+    html += '<div class="block"><div class="label">共进行轮次</div>' + n + ' 轮</div>';
+
+    html += '<div class="block"><div class="label">你在思考中走过的关键节点</div><ul>';
+    state.answers.forEach((a, i) => {
+      if (i === 0 || i >= state.answers.length - 2 || state.answers.length <= 4) {
+        html += '<li>' + escapeHtml(a) + '</li>';
+      } else if (i === 1) {
+        html += '<li>……</li>';
+      }
+    });
+    html += '</ul></div>';
+
+    html += '<div class="block"><div class="label">你初步形成的看法</div>';
+    if (firstAns) {
+      html += '<em>「' + escapeHtml(firstAns) + '」</em>';
+    } else {
+      html += '（你尚未给出明确表述）';
+    }
+    html += '</div>';
+
+    html += '<div class="block"><div class="label">仍待你自己进一步想清的问题</div><ul>';
+    html += '<li>支撑你立场的最关键前提，是否已经过你自己的检验？</li>';
+    html += '<li>相反的视角，是否还有你没认真考虑过的部分？</li>';
+    html += '<li>如果明天就要据此行动，你还缺哪块信息？</li>';
+    html += '</ul></div>';
+
+    const div = document.createElement("div");
+    div.className = "summary-card fade-in";
+    div.innerHTML = html;
+    chatEl.appendChild(div);
+    scrollBottom();
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  // ===== 事件绑定 =====
+  $("startBtn").addEventListener("click", startConversation);
+  $("sendBtn").addEventListener("click", handleReply);
+
+  $("topicInput").addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); startConversation(); }
+  });
+
+  replyInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleReply(); }
+  });
+
+  replyInput.addEventListener("input", function () {
+    this.style.height = "auto";
+    this.style.height = Math.min(this.scrollHeight, 140) + "px";
+  });
+
+})();
+</script>
+</body>
+</html>

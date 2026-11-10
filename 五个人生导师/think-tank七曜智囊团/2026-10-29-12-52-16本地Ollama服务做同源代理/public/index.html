@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f4ed" />
+  <title>知屿 · 个人信息管家</title>
+  <meta name="description" content="本地优先的个人信息管家：记录、整理、关联、检索与复盘。" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="app" id="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none">
+            <circle cx="20" cy="20" r="18.5" stroke="currentColor" stroke-opacity=".28"/>
+            <path d="M11 26.5c3.2-1.2 5.2-4.1 6.4-8.2.6-2.1 1.4-3.5 2.6-4.3 1.2 3.9 3.1 7 5.7 9.3 1.2 1 2.4 1.7 3.8 2.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            <circle cx="24.6" cy="14.3" r="1.5" fill="currentColor"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <strong>知屿</strong>
+          <span>个人信息管家</span>
+        </div>
+      </div>
+
+      <button class="capture-btn" id="captureBtn" type="button">
+        <span class="capture-plus">+</span>
+        <span>快速记录</span>
+        <kbd>⌘⏎</kbd>
+      </button>
+
+      <nav class="nav" id="nav" aria-label="主导航">
+        <button class="nav-item active" data-view="notes" type="button">
+          <span class="nav-icon" data-icon="inbox"></span>
+          <span class="nav-label">全部记录</span>
+          <span class="nav-count" id="navCountNotes">0</span>
+        </button>
+        <button class="nav-item" data-view="todos" type="button">
+          <span class="nav-icon" data-icon="check"></span>
+          <span class="nav-label">待办事项</span>
+          <span class="nav-count accent" id="navCountTodos">0</span>
+        </button>
+        <button class="nav-item" data-view="ask" type="button">
+          <span class="nav-icon" data-icon="chat"></span>
+          <span class="nav-label">智能问答</span>
+        </button>
+        <button class="nav-item" data-view="chat" type="button">
+          <span class="nav-icon" data-icon="chat"></span>
+          <span class="nav-label">自由聊天</span>
+        </button>
+        <button class="nav-item" data-view="summary" type="button">
+          <span class="nav-icon" data-icon="spark"></span>
+          <span class="nav-label">阶段总结</span>
+        </button>
+        <button class="nav-item" data-view="graph" type="button">
+          <span class="nav-icon" data-icon="graph"></span>
+          <span class="nav-label">关系图谱</span>
+        </button>
+      </nav>
+
+      <div class="side-section">
+        <div class="side-label">主题</div>
+        <div class="tag-list" id="tagList"></div>
+      </div>
+
+      <div class="side-foot">
+        <button class="ai-pill" id="settingsBtn" type="button">
+          <span class="status-dot" id="aiDot"></span>
+          <span class="ai-pill-text">
+            <span id="aiLabel">检测本地模型…</span>
+            <small id="aiModel">本地规则可用</small>
+          </span>
+          <span class="nav-icon" data-icon="settings"></span>
+        </button>
+        <div class="storage-hint">
+          <span class="nav-icon" data-icon="lock"></span>
+          数据只存在这台电脑
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="view-heading">
+          <h1 id="viewTitle">全部记录</h1>
+          <p id="viewSub">把零散的想法放进来，剩下的交给管家。</p>
+        </div>
+        <div class="top-actions">
+          <div class="searchbox" id="searchWrap">
+            <span class="nav-icon" data-icon="search"></span>
+            <input id="searchInput" type="search" placeholder="搜索记录、标签、待办…" autocomplete="off" />
+            <kbd id="searchKbd">⌘K</kbd>
+            <button class="search-clear hidden" id="searchClear" type="button" aria-label="清空搜索">×</button>
+          </div>
+          <button class="icon-btn top-capture" id="topCapture" type="button" aria-label="快速记录">
+            <span class="nav-icon" data-icon="plus"></span>
+          </button>
+          <button class="icon-btn top-settings" id="topSettings" type="button" aria-label="设置">
+            <span class="nav-icon" data-icon="settings"></span>
+          </button>
+        </div>
+      </header>
+
+      <section class="view notes-view" id="viewNotes">
+        <div class="list-pane" id="listPane">
+          <div class="demo-banner hidden" id="demoBanner">
+            <span>这是示例记录，帮你快速体验</span>
+            <button data-clear-demo type="button">清空示例</button>
+          </div>
+          <div class="filter-row" id="typeFilters">
+            <button class="chip active" data-type="all" type="button">全部</button>
+            <button class="chip" data-type="idea" type="button">想法</button>
+            <button class="chip" data-type="reference" type="button">资料</button>
+            <button class="chip" data-type="meeting" type="button">会议</button>
+            <button class="chip" data-type="todo" type="button">待办</button>
+            <button class="chip" data-type="link" type="button">链接</button>
+          </div>
+          <div class="list-meta">
+            <span id="listCount">0 条记录</span>
+            <label class="sort-wrap">
+              <span>排序</span>
+              <select id="sortSelect">
+                <option value="new">最新在前</option>
+                <option value="old">最早在前</option>
+                <option value="title">按标题</option>
+              </select>
+            </label>
+          </div>
+          <div class="note-list" id="noteList"></div>
+        </div>
+        <div class="detail-pane" id="detailPane"></div>
+      </section>
+
+      <section class="view todos-view hidden" id="viewTodos">
+        <div class="todos-inner" id="todosInner"></div>
+      </section>
+
+      <section class="view ask-view hidden" id="viewAsk">
+        <div class="ask-wrap">
+          <div class="ask-thread" id="askThread"></div>
+          <form class="ask-composer" id="askForm">
+            <textarea id="askInput" rows="1" placeholder="问问你的记录，例如：我最近在纠结什么？"></textarea>
+            <div class="ask-composer-foot">
+              <span class="ask-hint">Enter 发送 · Shift + Enter 换行 · 回答只基于你的本地记录</span>
+              <button class="send-btn" id="askSend" type="submit" aria-label="发送">
+                <span class="nav-icon" data-icon="arrowUp"></span>
+              </button>
+            </div>
+          </form>
+          <div class="ask-citation-note" id="askMode"></div>
+        </div>
+      </section>
+
+      <section class="view chat-view hidden" id="viewChat">
+        <div class="chat-wrap">
+          <div class="chat-thread" id="chatThread"></div>
+          <form class="chat-composer" id="chatForm">
+            <textarea id="chatInput" rows="1" placeholder="和本地模型随便聊聊，比如：帮我把这段话翻译成英文"></textarea>
+            <div class="chat-composer-foot">
+              <span class="chat-hint" id="chatHint">Enter 发送 · Shift + Enter 换行</span>
+              <div class="chat-composer-actions">
+                <button class="btn ghost small" id="chatClear" type="button" title="清空当前对话">清空</button>
+                <button class="send-btn" id="chatSend" type="submit" aria-label="发送">
+                  <span class="nav-icon" data-icon="arrowUp"></span>
+                </button>
+              </div>
+            </div>
+          </form>
+          <div class="ask-citation-note" id="chatMode"></div>
+        </div>
+      </section>
+
+      <section class="view summary-view hidden" id="viewSummary">
+        <div class="summary-inner" id="summaryInner"></div>
+      </section>
+
+      <section class="view graph-view hidden" id="viewGraph">
+        <div class="graph-stage" id="graphStage">
+          <canvas id="graphCanvas"></canvas>
+          <div class="graph-head">
+            <div>
+              <h2>记录之间的关系</h2>
+              <p>相似的主题会自动连在一起，点击节点查看原文。</p>
+            </div>
+            <div class="graph-legend" id="graphLegend"></div>
+          </div>
+          <div class="graph-empty hidden" id="graphEmpty">
+            <p>还没有足够的记录形成关系网。</p>
+            <button class="btn primary" data-open-capture type="button">写下第一条</button>
+          </div>
+          <div class="graph-tip" id="graphTip"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-layer hidden" id="captureModal">
+    <div class="modal capture-modal">
+      <div class="modal-head">
+        <div>
+          <div class="eyebrow">QUICK CAPTURE</div>
+          <h2>此刻想记下什么？</h2>
+        </div>
+        <button class="icon-btn" data-close-capture type="button" aria-label="关闭">
+          <span class="nav-icon" data-icon="close"></span>
+        </button>
+      </div>
+      <textarea id="captureText" class="capture-text" rows="7" placeholder="随手写。可以是一个想法、一段摘录、会议结论，或者「明天记得预约牙医」。"></textarea>
+      <div class="capture-meta">
+        <div class="capture-examples">
+          <button type="button" class="mini-chip" data-example="明天下午三点前把方案发给小林，记得附上预算表">一个待办</button>
+          <button type="button" class="mini-chip" data-example="想法：如果把周报做成一张随时间展开的地图，会不会更容易看出项目节奏？">一个想法</button>
+          <button type="button" class="mini-chip" data-example="阅读摘录：Local-first software 的核心是数据主副本在本地，离线可用是默认状态。">一段摘录</button>
+        </div>
+        <label class="switch-line">
+          <input type="checkbox" id="captureAI" checked />
+          <span class="switch"></span>
+          <span>自动整理</span>
+        </label>
+      </div>
+      <div class="modal-foot">
+        <span class="char-count" id="captureCount">0 字</span>
+        <div class="modal-actions">
+          <span class="submit-hint">⌘ / Ctrl + Enter 保存</span>
+          <button class="btn primary" id="captureSubmit" type="button">保存并整理</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="drawer-layer hidden" id="settingsLayer">
+    <div class="drawer-mask" data-close-settings></div>
+    <aside class="drawer" id="settingsDrawer">
+      <div class="drawer-head">
+        <div>
+          <div class="eyebrow">SETTINGS</div>
+          <h2>设置</h2>
+        </div>
+        <button class="icon-btn" data-close-settings type="button" aria-label="关闭">
+          <span class="nav-icon" data-icon="close"></span>
+        </button>
+      </div>
+      <div class="drawer-body" id="settingsBody"></div>
+    </aside>
+  </div>
+
+  <div class="modal-layer hidden" id="confirmModal">
+    <div class="modal confirm-modal">
+      <h3 id="confirmTitle">确认操作</h3>
+      <p id="confirmMessage"></p>
+      <div class="modal-foot">
+        <button class="btn ghost" id="confirmCancel" type="button">取消</button>
+        <button class="btn danger" id="confirmOk" type="button">确认</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="processing-card hidden" id="processingCard">
+    <div class="processing-ring"><span></span></div>
+    <div>
+      <strong id="processingTitle">正在整理这条记录</strong>
+      <p id="processingStep">读取内容…</p>
+    </div>
+  </div>
+
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <div class="reminder-stack" id="reminderStack" aria-live="polite" aria-label="到点提醒"></div>
+
+  <div class="remind-pop hidden" id="remindPop" role="dialog" aria-label="设置提醒时间">
+    <div class="rp-head">
+      <span class="nav-icon" data-icon="clock"></span>
+      <span class="rp-title" id="rpTitle">设置提醒</span>
+      <button class="rp-close" data-remind-close type="button" aria-label="关闭">×</button>
+    </div>
+    <div class="rp-quick" id="rpQuick"></div>
+    <div class="rp-custom">
+      <input type="datetime-local" id="rpInput" aria-label="自定义提醒时间" />
+      <button class="btn primary small" id="rpSave" type="button">保存</button>
+    </div>
+    <div class="rp-foot">
+      <button class="rp-clear hidden" id="rpClear" type="button">清除提醒</button>
+      <span class="rp-hint">到点在右下角提醒</span>
+    </div>
+  </div>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

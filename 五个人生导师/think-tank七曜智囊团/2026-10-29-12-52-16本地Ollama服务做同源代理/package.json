@@ -1,0 +1,15 @@
+{
+  "name": "zhiyu-personal-butler",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "知屿 · 本地优先的个人信息管家 Agent",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "reset-demo": "node server/reset.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

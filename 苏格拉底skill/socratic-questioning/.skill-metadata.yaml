@@ -1,0 +1,68 @@
+examples:
+  - id: start-guided-questioning
+    title:
+      zh: 围绕主题引导式追问
+      en: Start Guided Questioning
+    description:
+      zh: 只给出主题，用默认参数开始苏格拉底式追问
+      en: Give a topic and start Socratic questioning with default settings
+    prompt:
+      zh: |-
+        请用苏格拉底提问法引导我想清楚这个主题：{{主题}}
+        先不要直接给我答案，一轮只问一个问题，最后再输出反思总结。
+      en: |-
+        Use the Socratic method to help me think through this topic: {{topic}}
+        Don't give me the answer directly; ask one question per round, then output a reflection summary at the end.
+
+  - id: configure-session
+    title:
+      zh: 配置参数后开始追问
+      en: Configure Session Parameters
+    description:
+      zh: 显式设置目标、受众水平、轮次上限、结束条件、语气与语言
+      en: Explicitly set goal, audience level, max rounds, end condition, tone and language
+    prompt:
+      zh: |-
+        围绕主题"{{主题}}"进行苏格拉底式追问，参数如下：
+        目标：{{目标，例如"分清事实依据与隐含假设"}}
+        受众水平：{{beginner / intermediate / advanced}}
+        轮次上限：{{例如 6}}
+        结束条件：{{goal_met / rounds_exhausted / user_stop / answer_confirmed}}
+        语气：{{neutral / warm / formal}}，语言：{{zh / en}}
+      en: |-
+        Run Socratic questioning on the topic "{{topic}}" with these settings:
+        Goal: {{e.g. "separate evidence from hidden assumptions"}}
+        Audience level: {{beginner / intermediate / advanced}}
+        Max rounds: {{e.g. 6}}
+        End condition: {{goal_met / rounds_exhausted / user_stop / answer_confirmed}}
+        Tone: {{neutral / warm / formal}}, Language: {{zh / en}}
+
+  - id: request-reflection-summary
+    title:
+      zh: 结束追问并输出反思总结
+      en: End With Reflection Summary
+    description:
+      zh: 中途喊停，基于已聊到的内容产出结构化反思总结
+      en: Stop mid-way and produce a structured reflection summary from what was discussed
+    prompt:
+      zh: |-
+        停止追问吧，请基于我们到目前为止聊到的内容，输出结构化反思总结，包含：
+        核心议题、已澄清的关键点、浮现出的假设、考虑过的替代视角、尚未解决的问题、我自己的结论或下一步。
+      en: |-
+        Please stop questioning and output a structured reflection summary based on everything we discussed so far, covering:
+        core topic, clarified points, surfaced assumptions, alternatives considered, open questions, and my own conclusion or next step.
+
+  - id: ask-for-direct-answer
+    title:
+      zh: 索要直接答案时的处理
+      en: Ask for a Direct Answer
+    description:
+      zh: 用户不想继续被追问、要求先给简短方向时的边界处理
+      en: Handling when the user does not want more questions and asks for a brief direction first
+    prompt:
+      zh: |-
+        我不想再被追问了，先给我这个主题的简短方向：{{主题}}
+        然后再问我要不要继续用提问的方式把这一点想清楚。
+      en: |-
+        I don't want more questions right now; first give me a brief direction on this topic: {{topic}}
+        Then ask whether I want to continue working it out through questions.
